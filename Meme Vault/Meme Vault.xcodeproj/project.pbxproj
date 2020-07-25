@@ -12,6 +12,7 @@
 		59A2682124C903EE0056282C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59A2682024C903EE0056282C /* Assets.xcassets */; };
 		59A2682424C903EE0056282C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59A2682324C903EE0056282C /* Preview Assets.xcassets */; };
 		59A2682E24C90B380056282C /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A2682D24C90B380056282C /* AlbumsView.swift */; };
+		59A2683024C90D180056282C /* MemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A2682F24C90D180056282C /* MemeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		59A2682324C903EE0056282C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		59A2682524C903EE0056282C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		59A2682D24C90B380056282C /* AlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsView.swift; sourceTree = "<group>"; };
+		59A2682F24C90D180056282C /* MemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				59A2681C24C903ED0056282C /* Meme_VaultApp.swift */,
 				59A2681E24C903ED0056282C /* ContentView.swift */,
 				59A2682D24C90B380056282C /* AlbumsView.swift */,
+				59A2682F24C90D180056282C /* MemeView.swift */,
 				59A2682024C903EE0056282C /* Assets.xcassets */,
 				59A2682524C903EE0056282C /* Info.plist */,
 				59A2682224C903EE0056282C /* Preview Content */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59A2683024C90D180056282C /* MemeView.swift in Sources */,
 				59A2681F24C903ED0056282C /* ContentView.swift in Sources */,
 				59A2681D24C903ED0056282C /* Meme_VaultApp.swift in Sources */,
 				59A2682E24C90B380056282C /* AlbumsView.swift in Sources */,

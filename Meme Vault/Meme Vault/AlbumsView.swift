@@ -7,11 +7,15 @@
 
 import SwiftUI
 import Photos
+import CoreData
 
 extension UIImage: Identifiable {}
 
 struct AlbumsView: View {
+    @Environment(\.managedObjectContext) var moc
+    
     @State private var albums: PHFetchResult<PHAssetCollection>
+    @State private var selectedMeme: Meme?
     @State private var selectedImage: UIImage?
     @State private var showingImage: Bool = false
     
@@ -35,6 +39,20 @@ struct AlbumsView: View {
                     options.version = .current
                     
                     guard let asset = assets.firstObject else { return }
+                    
+                    let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "id = %@", asset.localIdentifier)
+                    let memes = try? moc.fetch(fetchRequest)
+                    
+                    if let meme = memes?.first {
+                        self.selectedMeme = meme
+                    } else {
+                        let meme = Meme(context: moc)
+                        meme.id = asset.localIdentifier
+                        self.selectedMeme = meme
+                        try? moc.save()
+                    }
+                    
                     PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { [self] imageData, dataUTI, _, _ in
                         guard let imageData = imageData else { return }
                         selectedImage = UIImage(data: imageData)
@@ -43,7 +61,9 @@ struct AlbumsView: View {
                 } label: {
                     HStack {
                         Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
-                        NavigationLink(destination: MemeView(image: $selectedImage), isActive: $showingImage) { EmptyView() }
+                        if let selectedMeme = selectedMeme, let selectedImage = selectedImage {
+                            NavigationLink(destination: MemeView(meme: selectedMeme, image: selectedImage), isActive: $showingImage) { EmptyView() }
+                        }
                         Spacer()
                         Image(systemName: "chevron.right")
                             .foregroundColor(.gray)

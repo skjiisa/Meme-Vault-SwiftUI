@@ -9,26 +9,26 @@ import SwiftUI
 import Photos
 
 struct MemeView: View {
-    @Binding var image: UIImage?
-    @State private var name: String = ""
+    @ObservedObject var meme: Meme
+    let image: UIImage
     
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                if let image = image {
-                    let scaledHeight = image.size.height * proxy.size.width / image.size.width
-                    let staticHeight = scaledHeight > proxy.size.width ? proxy.size.width : scaledHeight
-                    
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: proxy.size.width, height: staticHeight < (proxy.size.height - 54) ? staticHeight : (proxy.size.height - 54))
-                        .border(Color(.cyan), width: 2)
-                }
-                TextField("Name", text: $name)
+                let scaledHeight = image.size.height * proxy.size.width / image.size.width
+                let staticHeight = scaledHeight > proxy.size.width ? proxy.size.width : scaledHeight
+                
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: proxy.size.width, height: staticHeight < (proxy.size.height - 54) ? staticHeight : (proxy.size.height - 54))
+                    .border(Color(.cyan), width: 2)
+                
+                TextField("Name", text: $meme.wrappedName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.leading)
                     .padding(.trailing)
+                
                 List {
                     Text("Destination 1")
                     Text("Destination 2")

@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         List {
+            NavigationLink("WebDAV Account", destination: LoginView())
             Text("Destinations")
         }
         .listStyle(GroupedListStyle())

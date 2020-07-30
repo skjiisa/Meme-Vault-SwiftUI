@@ -19,6 +19,8 @@ struct AlbumsView: View {
     @State private var selectedImage: UIImage?
     @State private var showingImage: Bool = false
     
+    let memeController = MemeController()
+    
     init() {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
@@ -30,32 +32,9 @@ struct AlbumsView: View {
         List {
             ForEach(0..<albums.count) { index in
                 Button {
-                    let fetchOptions = PHFetchOptions()
-                    fetchOptions.fetchLimit = 1
-//                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-                    let assets = PHAsset.fetchAssets(in: albums.object(at: index), options: fetchOptions)
-                    
-                    let options = PHImageRequestOptions()
-                    options.version = .current
-                    
-                    guard let asset = assets.firstObject else { return }
-                    
-                    let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "id = %@", asset.localIdentifier)
-                    let memes = try? moc.fetch(fetchRequest)
-                    
-                    if let meme = memes?.first {
-                        self.selectedMeme = meme
-                    } else {
-                        let meme = Meme(context: moc)
-                        meme.id = asset.localIdentifier
-                        self.selectedMeme = meme
-                        try? moc.save()
-                    }
-                    
-                    PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { [self] imageData, dataUTI, _, _ in
-                        guard let imageData = imageData else { return }
-                        selectedImage = UIImage(data: imageData)
+                    selectedMeme = memeController.fetchImage(for: albums.object(at: index), context: moc) { image in
+                        guard let image = image else { return }
+                        selectedImage = image
                         showingImage = true
                     }
                 } label: {

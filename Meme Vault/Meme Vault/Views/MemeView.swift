@@ -21,7 +21,7 @@ struct MemeView: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: proxy.size.width, height: staticHeight < (proxy.size.height - 54) ? staticHeight : (proxy.size.height - 54))
+                    .frame(width: proxy.size.width, height: staticHeight < (proxy.size.height - 52) ? staticHeight : (proxy.size.height - 52))
                     .border(Color(.cyan), width: 2)
                 
                 TextField("Name", text: $meme.wrappedName)

@@ -32,7 +32,7 @@ struct AlbumsView: View {
                 Button {
                     let fetchOptions = PHFetchOptions()
                     fetchOptions.fetchLimit = 1
-                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+//                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
                     let assets = PHAsset.fetchAssets(in: albums.object(at: index), options: fetchOptions)
                     
                     let options = PHImageRequestOptions()

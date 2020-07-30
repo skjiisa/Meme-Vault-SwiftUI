@@ -12,11 +12,26 @@ struct ContentView: View {
     @State var showingAlbums = false
     
     var body: some View {
-        NavigationView {
-            if showingAlbums {
-                AlbumsView()
-            } else {
-                Text("Please enable Photos access in the settings app")
+        TabView {
+            NavigationView {
+                if showingAlbums {
+                    AlbumsView()
+                } else {
+                    Text("Please enable Photos access in the settings app")
+                }
+            }
+            .tabItem {
+                Image(systemName: "rectangle.stack.fill")
+                Text("Albums")
+                    .imageScale(.large)
+            }
+            NavigationView {
+                SettingsView()
+            }
+            .tabItem {
+                Image(systemName: "gear")
+                    .imageScale(.large)
+                Text("Settings")
             }
         }
         .onAppear {

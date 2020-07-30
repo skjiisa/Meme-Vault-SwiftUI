@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17175" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Destination" representedClassName="Destination" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="path" optional="YES" attributeType="String"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Destination" inverseName="parent" inverseEntity="Destination"/>
+        <relationship name="memes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Meme" inverseName="destination" inverseEntity="Meme"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="children" inverseEntity="Destination"/>
+    </entity>
     <entity name="Meme" representedClassName="Meme" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="destination" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="memes" inverseEntity="Destination"/>
     </entity>
     <elements>
-        <element name="Meme" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="Meme" positionX="-63" positionY="-18" width="128" height="88"/>
+        <element name="Destination" positionX="-63" positionY="0" width="128" height="118"/>
     </elements>
 </model>

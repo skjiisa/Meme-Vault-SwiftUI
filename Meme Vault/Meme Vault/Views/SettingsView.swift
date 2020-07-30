@@ -11,7 +11,7 @@ struct SettingsView: View {
     var body: some View {
         List {
             NavigationLink("WebDAV Account", destination: LoginView())
-            Text("Destinations")
+            NavigationLink("Destinations", destination: DestinationsView())
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle("Settings")

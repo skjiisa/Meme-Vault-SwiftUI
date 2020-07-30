@@ -13,13 +13,12 @@ extension UIImage: Identifiable {}
 
 struct AlbumsView: View {
     @Environment(\.managedObjectContext) var moc
+    @EnvironmentObject var memeController: MemeController
     
     @State private var albums: PHFetchResult<PHAssetCollection>
     @State private var selectedMeme: Meme?
     @State private var selectedImage: UIImage?
     @State private var showingImage: Bool = false
-    
-    let memeController = MemeController()
     
     init() {
         let options = PHFetchOptions()

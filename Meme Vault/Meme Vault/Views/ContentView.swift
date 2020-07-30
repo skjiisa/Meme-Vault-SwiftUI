@@ -11,6 +11,8 @@ import Photos
 struct ContentView: View {
     @State var showingAlbums = false
     
+    let memeController = MemeController()
+    
     var body: some View {
         TabView {
             NavigationView {
@@ -44,6 +46,7 @@ struct ContentView: View {
                 Text("Settings")
             }
         }
+        .environmentObject(memeController)
         .onAppear {
             PHPhotoLibrary.requestAuthorization { status in
                 switch status {

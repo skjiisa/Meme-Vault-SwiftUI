@@ -22,9 +22,19 @@ struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "rectangle.stack.fill")
-                Text("Albums")
                     .imageScale(.large)
+                Text("Albums")
             }
+            
+            NavigationView {
+                MemesView()
+            }
+            .tabItem {
+                Image(systemName: "photo.fill.on.rectangle.fill")
+                    .imageScale(.large)
+                Text("Memes")
+            }
+            
             NavigationView {
                 SettingsView()
             }

@@ -25,18 +25,20 @@ struct MemesView: View {
     var body: some View {
         List {
             ForEach(memes, id: \.self) { meme in
-                HStack {
-                    if let image = images[meme] {
+                if let image = images[meme] {
+                    NavigationLink(destination: MemeView(meme: meme, image: image), label: {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 64,
                                    height: image.size.height < image.size.width ? 64 * image.size.height / image.size.width : 64)
-                    }
+                        Text(meme.name ?? "[No name]")
+                    })
+                } else {
                     Text(meme.name ?? "[No name]")
-                }
-                .onAppear {
-                    fetchImage(for: meme)
+                        .onAppear {
+                            fetchImage(for: meme)
+                        }
                 }
             }
         }

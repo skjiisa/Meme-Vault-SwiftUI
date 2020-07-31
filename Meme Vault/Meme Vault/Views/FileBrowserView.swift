@@ -11,7 +11,7 @@ import FilesProvider
 struct FileBrowserView: View {
     @EnvironmentObject var providerController: ProviderController
     
-    @State private var files: [FileObject] = []
+    @ObservedObject var files = FilesContainer()
     @State private var fetchStarted = false
     @Binding var selectedPath: String
     @Binding var showingPaths: Bool
@@ -27,7 +27,7 @@ struct FileBrowserView: View {
     
     var body: some View {
         List {
-            ForEach(files, id: \.self) { file in
+            ForEach(files.files, id: \.self) { file in
                 NavigationLink(file.name, destination:
                                 FileBrowserView(selectedPath: $selectedPath, showingPaths: $showingPaths, path: providerController.appendDirectory(file.name, to: path))
                                 .environmentObject(providerController)
@@ -44,8 +44,8 @@ struct FileBrowserView: View {
                     NSLog("\(error)")
                 }
                 
-                for file in files where file.isDirectory {
-                    self.files.append(file)
+                DispatchQueue.main.async {
+                    self.files.addFolders(files)
                 }
             })
         }

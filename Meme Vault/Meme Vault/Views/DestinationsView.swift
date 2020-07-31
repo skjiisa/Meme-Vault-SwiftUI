@@ -34,7 +34,7 @@ struct DestinationsView: View {
     var addDestinationButton: some View {
         Button("Add") {
             let destination = Destination(context: moc)
-            destination.path = "/"
+            destination.path = parent?.path ?? "/"
             destination.parent = parent
             
             newDestination = destination

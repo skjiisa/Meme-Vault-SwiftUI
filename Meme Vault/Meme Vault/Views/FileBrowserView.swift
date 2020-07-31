@@ -16,7 +16,7 @@ struct FileBrowserView: View {
     @Binding var selectedPath: String
     @Binding var showingPaths: Bool
     
-    var path: String = "/"
+    let path: String
     
     var chooseButton: some View {
         Button("Choose") {
@@ -54,6 +54,6 @@ struct FileBrowserView: View {
 
 struct FileBrowserView_Previews: PreviewProvider {
     static var previews: some View {
-        FileBrowserView(selectedPath: .constant("/"), showingPaths: .constant(true))
+        FileBrowserView(selectedPath: .constant("/"), showingPaths: .constant(true), path: "/")
     }
 }

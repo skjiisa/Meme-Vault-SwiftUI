@@ -12,7 +12,6 @@ struct DestinationView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @ObservedObject var destination: Destination
-//    @State private var path: String = ""
     @State private var showingPaths = false
     
     var doneButton: some View {
@@ -28,7 +27,7 @@ struct DestinationView: View {
             }
             
             Section(header: Text("Path")) {
-                NavigationLink(destination: FileBrowserView(selectedPath: $destination.wrappedPath, showingPaths: $showingPaths).environmentObject(providerController), isActive: $showingPaths) {
+                NavigationLink(destination: FileBrowserView(selectedPath: $destination.wrappedPath, showingPaths: $showingPaths, path: destination.path ?? "/").environmentObject(providerController), isActive: $showingPaths) {
                     Text(destination.wrappedPath)
                 }
             }

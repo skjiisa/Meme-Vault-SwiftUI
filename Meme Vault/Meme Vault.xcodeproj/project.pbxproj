@@ -16,6 +16,7 @@
 		599E43AC24D37325001C8597 /* AlertRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43AB24D37325001C8597 /* AlertRepresentation.swift */; };
 		599E43AF24D379E8001C8597 /* DestinationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43AE24D379E8001C8597 /* DestinationsView.swift */; };
 		599E43B124D383E0001C8597 /* DestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43B024D383E0001C8597 /* DestinationView.swift */; };
+		599E43B324D3A1C3001C8597 /* FileBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43B224D3A1C3001C8597 /* FileBrowserView.swift */; };
 		59A2681D24C903ED0056282C /* Meme_VaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A2681C24C903ED0056282C /* Meme_VaultApp.swift */; };
 		59A2681F24C903ED0056282C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A2681E24C903ED0056282C /* ContentView.swift */; };
 		59A2682124C903EE0056282C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59A2682024C903EE0056282C /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		599E43AB24D37325001C8597 /* AlertRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRepresentation.swift; sourceTree = "<group>"; };
 		599E43AE24D379E8001C8597 /* DestinationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationsView.swift; sourceTree = "<group>"; };
 		599E43B024D383E0001C8597 /* DestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationView.swift; sourceTree = "<group>"; };
+		599E43B224D3A1C3001C8597 /* FileBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBrowserView.swift; sourceTree = "<group>"; };
 		59A2681924C903ED0056282C /* Meme Vault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meme Vault.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		59A2681C24C903ED0056282C /* Meme_VaultApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meme_VaultApp.swift; sourceTree = "<group>"; };
 		59A2681E24C903ED0056282C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				599E43A924D36D07001C8597 /* LoginView.swift */,
 				599E43AE24D379E8001C8597 /* DestinationsView.swift */,
 				599E43B024D383E0001C8597 /* DestinationView.swift */,
+				599E43B224D3A1C3001C8597 /* FileBrowserView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				599E43A524D36C06001C8597 /* ProviderController.swift in Sources */,
 				599E43AF24D379E8001C8597 /* DestinationsView.swift in Sources */,
 				599E43AC24D37325001C8597 /* AlertRepresentation.swift in Sources */,
+				599E43B324D3A1C3001C8597 /* FileBrowserView.swift in Sources */,
 				59C0AD9024CD250600979F59 /* Meme_Vault+Wrapping.swift in Sources */,
 				59A2681D24C903ED0056282C /* Meme_VaultApp.swift in Sources */,
 				599E43A024D35C75001C8597 /* MemesView.swift in Sources */,

@@ -19,4 +19,9 @@ extension Destination {
         get { self.name ?? "" }
         set { self.name = newValue }
     }
+    
+    var wrappedPath: String {
+        get { self.path ?? "" }
+        set { self.path = newValue }
+    }
 }

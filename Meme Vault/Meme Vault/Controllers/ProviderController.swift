@@ -68,6 +68,17 @@ class ProviderController: ObservableObject {
         webdavProvider = WebDAVFileProvider(baseURL: host, credential: credential)
         webdavProvider?.delegate = self
     }
+    
+    //MARK: Pathing
+    
+    func appendDirectory(_ directory: String, to path: String) -> String {
+        if path.last == "/" {
+            return path + directory
+        }
+        
+        return path + "/" + directory
+    }
+    
 }
 
 //MARK: File provider delegate

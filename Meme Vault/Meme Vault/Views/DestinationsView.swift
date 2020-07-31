@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DestinationsView: View {
     @Environment(\.managedObjectContext) var moc
+    @EnvironmentObject var providerController: ProviderController
     var destinationsFetchRequest: FetchRequest<Destination>
     var destinations: FetchedResults<Destination> {
         destinationsFetchRequest.wrappedValue
@@ -73,6 +74,7 @@ struct DestinationsView: View {
         } content: { destination in
             NavigationView {
                 DestinationView(destination: destination)
+                    .environmentObject(providerController)
             }
         }
 

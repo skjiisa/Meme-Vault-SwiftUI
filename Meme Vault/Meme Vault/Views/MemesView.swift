@@ -32,7 +32,13 @@ struct MemesView: View {
                             .scaledToFit()
                             .frame(width: 64,
                                    height: image.size.height < image.size.width ? 64 * image.size.height / image.size.width : 64)
-                        Text(meme.name ?? "[No name]")
+                        VStack {
+                            Text(meme.name ?? "[No name]")
+                            if let destination = meme.destination {
+                                Text(destination.name ?? "")
+                                    .font(.caption)
+                            }
+                        }
                     })
                 } else {
                     Text(meme.name ?? "[No name]")

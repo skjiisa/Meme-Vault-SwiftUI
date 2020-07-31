@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 591DC3C424CD19B800CDA06D /* Meme_Vault.xcdatamodeld */; };
+		59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59581A6524D3B931007E5284 /* DestinationDisclosure.swift */; };
 		599E43A024D35C75001C8597 /* MemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E439F24D35C75001C8597 /* MemesView.swift */; };
 		599E43A224D35EAD001C8597 /* MemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43A124D35EAD001C8597 /* MemeController.swift */; };
 		599E43A524D36C06001C8597 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43A424D36C06001C8597 /* ProviderController.swift */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		591DC3C524CD19B800CDA06D /* Meme_Vault.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Meme_Vault.xcdatamodel; sourceTree = "<group>"; };
+		59581A6524D3B931007E5284 /* DestinationDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDisclosure.swift; sourceTree = "<group>"; };
 		599E439F24D35C75001C8597 /* MemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesView.swift; sourceTree = "<group>"; };
 		599E43A124D35EAD001C8597 /* MemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeController.swift; sourceTree = "<group>"; };
 		599E43A424D36C06001C8597 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				59A2681E24C903ED0056282C /* ContentView.swift */,
 				59A2682D24C90B380056282C /* AlbumsView.swift */,
 				59A2682F24C90D180056282C /* MemeView.swift */,
+				59581A6524D3B931007E5284 /* DestinationDisclosure.swift */,
 				599E439F24D35C75001C8597 /* MemesView.swift */,
 				59C0AD9324CD424200979F59 /* SettingsView.swift */,
 				599E43A924D36D07001C8597 /* LoginView.swift */,
@@ -234,6 +237,7 @@
 				59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */,
 				591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */,
 				599E43AA24D36D07001C8597 /* LoginView.swift in Sources */,
+				59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */,
 				599E43A224D35EAD001C8597 /* MemeController.swift in Sources */,
 				59A2682E24C90B380056282C /* AlbumsView.swift in Sources */,
 			);

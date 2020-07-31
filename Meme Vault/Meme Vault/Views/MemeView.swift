@@ -9,7 +9,10 @@ import SwiftUI
 import Photos
 
 struct MemeView: View {
+    @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
+    
     @ObservedObject var meme: Meme
+//    @State var destination: Destination?
     let image: UIImage
     
     var body: some View {
@@ -30,15 +33,9 @@ struct MemeView: View {
                     .padding(.trailing)
                 
                 List {
-                    Text("Destination 1")
-                    Text("Destination 2")
-                    Text("Destination 3")
-                    Text("Destination 4")
-                    Text("Destination 5")
-                    Text("Destination 6")
-                    Text("Destination 7")
-                    Text("Destination 8")
-                    Text("Destination 9")
+                    ForEach(destinations, id: \.self) { destination in
+                        DestinationDisclosure(chosenDestination: $meme.destination, destination: destination)
+                    }
                 }
             }
         }

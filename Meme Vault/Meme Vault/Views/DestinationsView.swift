@@ -14,6 +14,8 @@ struct DestinationsView: View {
         destinationsFetchRequest.wrappedValue
     }
     
+    @State private var newDestination: Destination?
+    
     let parent: Destination?
     
     init(parent: Destination? = nil) {
@@ -24,16 +26,17 @@ struct DestinationsView: View {
             predicate = NSPredicate(format: "parent = nil")
         }
         
-        destinationsFetchRequest = FetchRequest(entity: Destination.entity(), sortDescriptors: [], predicate: predicate)
+        destinationsFetchRequest = FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: predicate)
         self.parent = parent
     }
     
     var addDestinationButton: some View {
         Button("Add") {
-            let newDestination = Destination(context: moc)
-            newDestination.name = "New Destination"
-            newDestination.path = "/asdf"
-            newDestination.parent = parent
+            let destination = Destination(context: moc)
+            destination.path = "/"
+            destination.parent = parent
+            
+            newDestination = destination
         }
     }
     
@@ -41,10 +44,9 @@ struct DestinationsView: View {
         List {
             ForEach(destinations, id: \.self) { destination in
                 NavigationLink(destination: DestinationsView(parent: destination)) {
-                    if let name = destination.name {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(name)
+                                Text(destination.name ?? "")
                                     .font(.body)
                                 if let path = destination.path {
                                     Text(path)
@@ -56,12 +58,24 @@ struct DestinationsView: View {
                                 Text("\(childrenCount) child\(childrenCount > 1 ? "ren" : "")")
                             }
                         }
-                    }
                 }
+            }
+            .onDelete { indexSet in
+                guard let index = indexSet.first else { return }
+                let destination = destinations[index]
+                moc.delete(destination)
             }
         }
         .navigationBarTitle(parent?.name ?? "Destinations")
         .navigationBarItems(trailing: addDestinationButton)
+        .sheet(item: $newDestination) {
+            try? moc.save()
+        } content: { destination in
+            NavigationView {
+                DestinationView(destination: destination)
+            }
+        }
+
     }
 }
 

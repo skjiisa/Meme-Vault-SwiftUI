@@ -13,3 +13,10 @@ extension Meme {
         set { self.name = newValue }
     }
 }
+
+extension Destination {
+    var wrappedName: String {
+        get { self.name ?? "" }
+        set { self.name = newValue }
+    }
+}

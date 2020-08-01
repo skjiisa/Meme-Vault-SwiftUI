@@ -29,7 +29,7 @@ struct FileBrowserView: View {
         List {
             ForEach(files.files, id: \.self) { file in
                 NavigationLink(file.name, destination:
-                                FileBrowserView(selectedPath: $selectedPath, showingPaths: $showingPaths, path: providerController.appendDirectory(file.name, to: path))
+                                FileBrowserView(selectedPath: $selectedPath, showingPaths: $showingPaths, path: providerController.append(fileNamed: file.name, to: path))
                                 .environmentObject(providerController)
                 )
             }

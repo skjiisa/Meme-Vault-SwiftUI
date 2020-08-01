@@ -13,17 +13,31 @@ class MemeController: ObservableObject {
     
     @Published var images: [Meme: MemeContainer] = [:]
     
-    func fetchImage(for asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
+    func fetchImageData(for asset: PHAsset, completion: @escaping (Data?, String?) -> Void) {
         let options = PHImageRequestOptions()
         options.version = .current
         
-        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, _, _, _ in
+        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, dataUTI, _, _ in
+            completion(imageData, dataUTI)
+        }
+    }
+    
+    func fetchImage(for asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
+        fetchImageData(for: asset) { imageData, _ in
             guard let imageData = imageData else {
                 completion(nil)
                 return
             }
             completion(UIImage(data: imageData))
         }
+    }
+    
+    func fetchAsset(for meme: Meme) -> PHAsset? {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.fetchLimit = 1
+        
+        guard let id = meme.id else { return nil }
+        return PHAsset.fetchAssets(withLocalIdentifiers: [id], options: fetchOptions).firstObject
     }
     
     func fetchImage(for album: PHAssetCollection, context: NSManagedObjectContext, completion: @escaping (MemeContainer?) -> Void) {
@@ -59,14 +73,7 @@ class MemeController: ObservableObject {
     }
     
     func fetchImage(for meme: Meme, completion: @escaping (UIImage?) -> Void) {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 1
-        
-        guard let id = meme.id,
-              let asset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: fetchOptions).firstObject else {
-            return completion(nil)
-        }
-        
+        guard let asset = fetchAsset(for: meme) else { return completion(nil) }
         fetchImage(for: asset, completion: completion)
     }
     
@@ -76,6 +83,11 @@ class MemeController: ObservableObject {
             guard let image = image else { return }
             self.images[meme] = MemeContainer(meme: meme, image: image)
         }
+    }
+    
+    func fetchImageData(for meme: Meme, completion: @escaping (Data?, String?) -> Void) {
+        guard let asset = fetchAsset(for: meme) else { return completion(nil,nil) }
+        fetchImageData(for: asset, completion: completion)
     }
     
 }

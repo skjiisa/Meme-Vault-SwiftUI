@@ -72,7 +72,7 @@ class ProviderController: ObservableObject {
     
     //MARK: Pathing
     
-    func appendDirectory(_ directory: String, to path: String) -> String {
+    func append(fileNamed directory: String, to path: String) -> String {
         if path.last == "/" {
             return path + directory
         }
@@ -82,8 +82,39 @@ class ProviderController: ObservableObject {
     
     //MARK: Networking
     
-    func upload(_ memeContainer: MemeContainer) {
-        print("Uploading \(memeContainer.meme.wrappedName)... (not really this is just a placeholder)")
+    func upload(_ meme: Meme, memeController: MemeController) {
+        guard let destinationPath = meme.destination?.path else { return }
+        memeController.fetchImageData(for: meme) { imageData, dataUTI in
+            guard let imageData = imageData,
+                  let dataUTI = dataUTI,
+                  let typeURL = URL(string: dataUTI) else { return }
+            
+            let filename: String
+            if let name = meme.name,
+               !name.isEmpty {
+                filename = "\(name).\(typeURL.pathExtension)"
+            } else {
+                // Temp default file name
+                filename = typeURL.lastPathComponent
+            }
+            
+            let path = self.append(fileNamed: filename, to: destinationPath)
+            
+            do {
+                let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+                try imageData.write(to: tempFile)
+                
+                self.webdavProvider?.copyItem(localFile: tempFile, to: path, overwrite: true, completionHandler: { error in
+                    if let error = error {
+                        return NSLog("\(error)")
+                    }
+                    
+                    // Mark the meme as uploaded
+                })
+            } catch {
+                NSLog("\(error)")
+            }
+        }
     }
     
 }

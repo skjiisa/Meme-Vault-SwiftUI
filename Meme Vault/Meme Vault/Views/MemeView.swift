@@ -9,6 +9,7 @@ import SwiftUI
 import Photos
 
 struct MemeView: View {
+    @EnvironmentObject var memeController: MemeController
     @EnvironmentObject var providerController: ProviderController
     @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
     
@@ -29,7 +30,7 @@ struct MemeView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.leading)
                     Button("Upload") {
-                        providerController.upload(memeContainer)
+                        providerController.upload(memeContainer.meme, memeController: memeController)
                     }
                     .padding(.trailing)
                     .disabled(memeContainer.meme.destination == nil)

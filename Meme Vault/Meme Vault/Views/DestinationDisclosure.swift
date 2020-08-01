@@ -33,6 +33,7 @@ struct DestinationDisclosure: View {
             Button(destination.name ?? "Destination") {
                 chosenDestination = destination
             }
+            .disabled(chosenDestination == destination)
         }
     }
 }

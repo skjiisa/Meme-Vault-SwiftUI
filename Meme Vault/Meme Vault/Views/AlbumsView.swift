@@ -16,8 +16,7 @@ struct AlbumsView: View {
     @EnvironmentObject var memeController: MemeController
     
     @State private var albums: PHFetchResult<PHAssetCollection>
-    @State private var selectedMeme: Meme?
-    @State private var selectedImage: UIImage?
+    @State private var selectedMeme: MemeContainer?
     @State private var showingImage: Bool = false
     
     init() {
@@ -31,16 +30,15 @@ struct AlbumsView: View {
         List {
             ForEach(0..<albums.count) { index in
                 Button {
-                    selectedMeme = memeController.fetchImage(for: albums.object(at: index), context: moc) { image in
-                        guard let image = image else { return }
-                        selectedImage = image
-                        showingImage = true
+                    memeController.fetchImage(for: albums.object(at: index), context: moc) { memeContainer in
+                        selectedMeme = memeContainer
+                        showingImage = memeContainer != nil
                     }
                 } label: {
                     HStack {
                         Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
-                        if let selectedMeme = selectedMeme, let selectedImage = selectedImage {
-                            NavigationLink(destination: MemeView(meme: selectedMeme, image: selectedImage), isActive: $showingImage) { EmptyView() }
+                        if let selectedMeme = selectedMeme {
+                            NavigationLink(destination: MemeView(memeContainer: selectedMeme), isActive: $showingImage) { EmptyView() }
                         }
                         Spacer()
                         Image(systemName: "chevron.right")

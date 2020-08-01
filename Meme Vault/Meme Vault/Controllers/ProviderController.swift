@@ -5,6 +5,7 @@
 //  Created by Isaac Lyons on 7/30/20.
 //
 
+import SwiftUI
 import Photos
 import FilesProvider
 
@@ -77,6 +78,12 @@ class ProviderController: ObservableObject {
         }
         
         return path + "/" + directory
+    }
+    
+    //MARK: Networking
+    
+    func upload(_ memeContainer: MemeContainer) {
+        print("Uploading \(memeContainer.meme.wrappedName)... (not really this is just a placeholder)")
     }
     
 }

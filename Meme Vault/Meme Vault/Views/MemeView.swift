@@ -15,6 +15,11 @@ struct MemeView: View {
     
     @ObservedObject var memeContainer: MemeContainer
     
+    init?(memeContainer: MemeContainer?) {
+        guard let memeContainer = memeContainer else { return nil }
+        self.memeContainer = memeContainer
+    }
+    
     var body: some View {
         GeometryReader { proxy in
             VStack {

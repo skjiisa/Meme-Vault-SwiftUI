@@ -9,36 +9,37 @@ import SwiftUI
 import Photos
 
 struct MemeView: View {
-    @ObservedObject var meme: Meme
-    let image: UIImage
+    @EnvironmentObject var memeController: MemeController
+    @EnvironmentObject var providerController: ProviderController
+    @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
+    
+    @ObservedObject var memeContainer: MemeContainer
     
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                let scaledHeight = image.size.height * proxy.size.width / image.size.width
-                let staticHeight = scaledHeight > proxy.size.width ? proxy.size.width : scaledHeight
-                
-                Image(uiImage: image)
+                Image(uiImage: memeContainer.image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: proxy.size.width, height: staticHeight < (proxy.size.height - 52) ? staticHeight : (proxy.size.height - 52))
+                    .frame(width: proxy.size.width,
+                           height: memeContainer.scaledHeight(frameSize: proxy.size))
                     .border(Color(.cyan), width: 2)
                 
-                TextField("Name", text: $meme.wrappedName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.leading)
+                HStack {
+                    TextField("Name", text: $memeContainer.meme.wrappedName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.leading)
+                    Button("Upload") {
+                        providerController.upload(memeContainer.meme, memeController: memeController)
+                    }
                     .padding(.trailing)
+                    .disabled(memeContainer.meme.destination == nil)
+                }
                 
                 List {
-                    Text("Destination 1")
-                    Text("Destination 2")
-                    Text("Destination 3")
-                    Text("Destination 4")
-                    Text("Destination 5")
-                    Text("Destination 6")
-                    Text("Destination 7")
-                    Text("Destination 8")
-                    Text("Destination 9")
+                    ForEach(destinations, id: \.self) { destination in
+                        DestinationDisclosure(chosenDestination: $memeContainer.meme.destination, destination: destination)
+                    }
                 }
             }
         }

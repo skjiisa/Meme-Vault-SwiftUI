@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DestinationsView: View {
     @Environment(\.managedObjectContext) var moc
+    @EnvironmentObject var providerController: ProviderController
     var destinationsFetchRequest: FetchRequest<Destination>
     var destinations: FetchedResults<Destination> {
         destinationsFetchRequest.wrappedValue
@@ -33,7 +34,7 @@ struct DestinationsView: View {
     var addDestinationButton: some View {
         Button("Add") {
             let destination = Destination(context: moc)
-            destination.path = "/"
+            destination.path = parent?.path ?? "/"
             destination.parent = parent
             
             newDestination = destination
@@ -73,6 +74,7 @@ struct DestinationsView: View {
         } content: { destination in
             NavigationView {
                 DestinationView(destination: destination)
+                    .environmentObject(providerController)
             }
         }
 

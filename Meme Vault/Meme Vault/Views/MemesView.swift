@@ -12,32 +12,28 @@ struct MemesView: View {
     @EnvironmentObject var memeController: MemeController
     @FetchRequest(entity: Meme.entity(), sortDescriptors: []) var memes: FetchedResults<Meme>
     
-    @State private var images: [Meme: UIImage] = [:]
-    
-    private func fetchImage(for meme: Meme) {
-        guard images[meme] == nil else { return }
-        memeController.fetchImage(for: meme) { image in
-            guard let image = image else { return }
-            images[meme] = image
-        }
-    }
-    
     var body: some View {
         List {
             ForEach(memes, id: \.self) { meme in
-                if let image = images[meme] {
-                    NavigationLink(destination: MemeView(meme: meme, image: image), label: {
-                        Image(uiImage: image)
+                if let container = memeController.images[meme] {
+                    NavigationLink(destination: MemeView(memeContainer: container), label: {
+                        Image(uiImage: container.image)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 64,
-                                   height: image.size.height < image.size.width ? 64 * image.size.height / image.size.width : 64)
-                        Text(meme.name ?? "[No name]")
+                                   height: container.thumbnailHeight)
+                        VStack {
+                            Text(meme.name ?? "[No name]")
+                            if let destination = meme.destination {
+                                Text(destination.name ?? "")
+                                    .font(.caption)
+                            }
+                        }
                     })
                 } else {
                     Text(meme.name ?? "[No name]")
                         .onAppear {
-                            fetchImage(for: meme)
+                            memeController.fetchImage(for: meme)
                         }
                 }
             }

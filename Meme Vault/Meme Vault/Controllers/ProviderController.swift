@@ -5,6 +5,7 @@
 //  Created by Isaac Lyons on 7/30/20.
 //
 
+import SwiftUI
 import Photos
 import FilesProvider
 
@@ -68,6 +69,54 @@ class ProviderController: ObservableObject {
         webdavProvider = WebDAVFileProvider(baseURL: host, credential: credential)
         webdavProvider?.delegate = self
     }
+    
+    //MARK: Pathing
+    
+    func append(fileNamed directory: String, to path: String) -> String {
+        if path.last == "/" {
+            return path + directory
+        }
+        
+        return path + "/" + directory
+    }
+    
+    //MARK: Networking
+    
+    func upload(_ meme: Meme, memeController: MemeController) {
+        guard let destinationPath = meme.destination?.path else { return }
+        memeController.fetchImageData(for: meme) { imageData, dataUTI in
+            guard let imageData = imageData,
+                  let dataUTI = dataUTI,
+                  let typeURL = URL(string: dataUTI) else { return }
+            
+            let filename: String
+            if let name = meme.name,
+               !name.isEmpty {
+                filename = "\(name).\(typeURL.pathExtension)"
+            } else {
+                // Temp default file name
+                filename = typeURL.lastPathComponent
+            }
+            
+            let path = self.append(fileNamed: filename, to: destinationPath)
+            
+            do {
+                let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+                try imageData.write(to: tempFile)
+                
+                self.webdavProvider?.copyItem(localFile: tempFile, to: path, overwrite: true, completionHandler: { error in
+                    if let error = error {
+                        return NSLog("\(error)")
+                    }
+                    
+                    // Mark the meme as uploaded
+                })
+            } catch {
+                NSLog("\(error)")
+            }
+        }
+    }
+    
 }
 
 //MARK: File provider delegate

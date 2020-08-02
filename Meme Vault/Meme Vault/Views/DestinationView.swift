@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct DestinationView: View {
+    @EnvironmentObject var providerController: ProviderController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @ObservedObject var destination: Destination
+    @State private var showingPaths = false
     
     var doneButton: some View {
         Button("Done") {
@@ -20,7 +22,15 @@ struct DestinationView: View {
     
     var body: some View {
         Form {
-            TextField("Name", text: $destination.wrappedName)
+            Section(header: Text("Name")) {
+                TextField("Name", text: $destination.wrappedName)
+            }
+            
+            Section(header: Text("Path")) {
+                NavigationLink(destination: FileBrowserView(selectedPath: $destination.wrappedPath, showingPaths: $showingPaths, path: destination.path ?? "/").environmentObject(providerController), isActive: $showingPaths) {
+                    Text(destination.wrappedPath)
+                }
+            }
         }
         .navigationTitle("Edit Destination")
         .navigationBarItems(trailing: doneButton)

@@ -13,37 +13,45 @@ struct MemeView: View {
     @EnvironmentObject var providerController: ProviderController
     @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
     
-    @ObservedObject var memeContainer: MemeContainer
+    @State private var currentMeme: Meme
     
-    init?(memeContainer: MemeContainer?) {
-        guard let memeContainer = memeContainer else { return nil }
-        self.memeContainer = memeContainer
+    init?(startingMeme: Meme?) {
+        guard let startingMeme = startingMeme else { return nil }
+        _currentMeme = .init(initialValue: startingMeme)
     }
     
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                Image(uiImage: memeContainer.image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: proxy.size.width,
-                           height: memeContainer.scaledHeight(frameSize: proxy.size))
-                    .border(Color(.cyan), width: 2)
+                TabView(selection: $currentMeme) {
+                    ForEach(memeController.memes, id: \.self) { meme in
+                        Image(uiImage: memeController.container(for: meme)?.image, orSystemName: "photo", meme: meme)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.gray)
+                            .padding(memeController.images[meme] == nil ? (proxy.size.width - 40) / 2 : 0)
+                            .border(Color(.cyan), width: 2)
+                    }
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .frame(width: proxy.size.width,
+                       height: proxy.size.width < (proxy.size.height - 52) ? proxy.size.width : (proxy.size.height - 52))
                 
                 HStack {
-                    TextField("Name", text: $memeContainer.meme.wrappedName)
+                    TextField("Name", text: $currentMeme.wrappedName)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.leading)
                     Button("Upload") {
-                        providerController.upload(memeContainer.meme, memeController: memeController)
+                        providerController.upload(currentMeme, memeController: memeController)
                     }
                     .padding(.trailing)
-                    .disabled(memeContainer.meme.destination == nil)
+                    .disabled(currentMeme.destination == nil)
                 }
                 
+                //TODO: Maybe convert this to a new SwiftUI 2 list with children?
                 List {
                     ForEach(destinations, id: \.self) { destination in
-                        DestinationDisclosure(chosenDestination: $memeContainer.meme.destination, destination: destination)
+                        DestinationDisclosure(chosenDestination: $currentMeme.destination, destination: destination)
                     }
                 }
             }

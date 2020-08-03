@@ -11,7 +11,27 @@ import SwiftUI
 
 class MemeController: ObservableObject {
     
+    //MARK: Properties
+    
     @Published var images: [Meme: MemeContainer] = [:]
+    
+    var memes: [Meme] = []
+    @Published var currentMemeIndex: Int = 0
+    private var fetchQueue = Set<Meme>()
+    
+    //MARK: Getting Meme Containers
+    
+    func load(_ fetchedMemes: FetchedResults<Meme>) {
+        memes = Array(fetchedMemes)
+    }
+    
+    func container(for meme: Meme) -> MemeContainer? {
+        let image = images[meme]
+        fetchImage(for: meme)
+        return image
+    }
+    
+    //MARK: Fetching Images
     
     func fetchImageData(for asset: PHAsset, completion: @escaping (Data?, String?) -> Void) {
         let options = PHImageRequestOptions()
@@ -64,6 +84,8 @@ class MemeController: ObservableObject {
             try? context.save()
         }
         
+        self.memes = [meme]
+        
         fetchImage(for: asset) { image in
             guard let image = image else { return completion(nil) }
             let container = MemeContainer(meme: meme, image: image)
@@ -78,8 +100,11 @@ class MemeController: ObservableObject {
     }
     
     func fetchImage(for meme: Meme) {
-        guard images[meme] == nil else { return }
+        guard images[meme] == nil,
+              !fetchQueue.contains(meme) else { return }
+        fetchQueue.insert(meme)
         fetchImage(for: meme) { image in
+            self.fetchQueue.remove(meme)
             guard let image = image else { return }
             self.images[meme] = MemeContainer(meme: meme, image: image)
         }

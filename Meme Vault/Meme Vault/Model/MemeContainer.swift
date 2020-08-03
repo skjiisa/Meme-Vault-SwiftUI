@@ -19,10 +19,4 @@ class MemeContainer: ObservableObject {
     var thumbnailHeight: CGFloat {
         image.size.height < image.size.width ? 64 * image.size.height / image.size.width : 64
     }
-    
-    func scaledHeight(frameSize size: CGSize) -> CGFloat {
-        let scaledHeight = image.size.height * size.width / image.size.width
-        let staticHeight = scaledHeight > size.width ? size.width : scaledHeight
-        return staticHeight < (size.height - 52) ? staticHeight : (size.height - 52)
-    }
 }

@@ -35,7 +35,7 @@ struct AlbumsView: View {
                         currentImage = selectedMeme == nil ? nil : index
                     }
                 } label: {
-                    NavigationLink(destination: MemeView(memeContainer: selectedMeme), tag: index, selection: $currentImage) {
+                    NavigationLink(destination: MemeView(startingMeme: selectedMeme?.meme), tag: index, selection: $currentImage) {
                         HStack {
                             Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
                         }

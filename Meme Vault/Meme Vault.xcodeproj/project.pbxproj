@@ -28,6 +28,7 @@
 		59A7A62724D4DE5D002E6455 /* MemeContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A7A62624D4DE5D002E6455 /* MemeContainer.swift */; };
 		59C0AD9024CD250600979F59 /* Meme_Vault+Wrapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */; };
 		59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD9324CD424200979F59 /* SettingsView.swift */; };
+		59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E009E324D7DA04001F8A31 /* Image+Meme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		59A7A62624D4DE5D002E6455 /* MemeContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeContainer.swift; sourceTree = "<group>"; };
 		59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Wrapping.swift"; sourceTree = "<group>"; };
 		59C0AD9324CD424200979F59 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		59E009E324D7DA04001F8A31 /* Image+Meme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Meme.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				599E43AB24D37325001C8597 /* AlertRepresentation.swift */,
+				59E009E324D7DA04001F8A31 /* Image+Meme.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				59A2681D24C903ED0056282C /* Meme_VaultApp.swift in Sources */,
 				599E43B524D3AEF1001C8597 /* FilesContainer.swift in Sources */,
 				599E43A024D35C75001C8597 /* MemesView.swift in Sources */,
+				59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */,
 				59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */,
 				591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */,
 				599E43AA24D36D07001C8597 /* LoginView.swift in Sources */,

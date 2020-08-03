@@ -15,8 +15,9 @@ struct MemesView: View {
     var body: some View {
         List {
             ForEach(memes, id: \.self) { meme in
-                if let container = memeController.images[meme] {
-                    NavigationLink(destination: MemeView(memeContainer: container), label: {
+                NavigationLink(destination: MemeView(startingMeme: meme)) {
+                    //TODO: Ensure this is running lazily / update it to be work lazily
+                    if let container = memeController.container(for: meme) {
                         Image(uiImage: container.image)
                             .resizable()
                             .scaledToFit()
@@ -29,12 +30,13 @@ struct MemesView: View {
                                     .font(.caption)
                             }
                         }
-                    })
-                } else {
-                    Text(meme.name ?? "[No name]")
-                        .onAppear {
-                            memeController.fetchImage(for: meme)
-                        }
+                    } else {
+                        Text(meme.name ?? "[No name]")
+                            .onAppear {
+                                //TODO: remove this whole onAppear and load the fetchedResults when the NavigationLink changes
+                                memeController.load(memes)
+                            }
+                    }
                 }
             }
         }

@@ -44,6 +44,11 @@ struct AlbumsView: View {
             }
         }
         .navigationBarTitle("Albums")
+        .onChange(of: currentImage) { index in
+            if index == nil {
+                memeController.assets = nil
+            }
+        }
     }
 }
 

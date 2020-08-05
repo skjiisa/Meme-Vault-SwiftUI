@@ -14,15 +14,29 @@ class MemeController: ObservableObject {
     //MARK: Properties
     
     @Published var images: [Meme: MemeContainer] = [:]
+    @Published var memes: [Meme] = []
     
-    var memes: [Meme] = []
-    @Published var currentMemeIndex: Int = 0
+    var assets: PHFetchResult<PHAsset>?
+    var nextAssetToFetch: Int = 0
+    
     private var fetchQueue = Set<Meme>()
+    
+    //MARK: Meme CRUD
+    
+    func delete(meme: Meme, context: NSManagedObjectContext) {
+        context.delete(meme)
+        do {
+            try context.save()
+        } catch {
+            NSLog("\(error)")
+        }
+    }
     
     //MARK: Getting Meme Containers
     
     func load(_ fetchedMemes: FetchedResults<Meme>) {
         memes = Array(fetchedMemes)
+        assets = nil
     }
     
     func container(for meme: Meme) -> MemeContainer? {
@@ -52,40 +66,56 @@ class MemeController: ObservableObject {
         }
     }
     
+    func getMeme(for asset: PHAsset, context: NSManagedObjectContext) -> Meme {
+        let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id = %@", asset.localIdentifier)
+        fetchRequest.fetchLimit = 1
+        let memes = try? context.fetch(fetchRequest)
+        
+        if let firstMeme = memes?.first {
+            return firstMeme
+        } else {
+            let meme = Meme(context: context)
+            meme.id = asset.localIdentifier
+            try? context.save()
+            return meme
+        }
+    }
+    
+    @discardableResult
+    func getNextAssetMeme(context: NSManagedObjectContext) -> Meme? {
+        guard nextAssetToFetch < assets?.count ?? 0,
+              let asset = assets?.object(at: nextAssetToFetch) else { return nil }
+        
+        let meme = getMeme(for: asset, context: context)
+        
+        if nextAssetToFetch == 0 {
+            memes = [meme]
+        } else {
+            memes.append(meme)
+        }
+        nextAssetToFetch += 1
+        return meme
+    }
+    
     func fetchAsset(for meme: Meme) -> PHAsset? {
+        guard let id = meme.id else { return nil }
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = 1
         
-        guard let id = meme.id else { return nil }
         return PHAsset.fetchAssets(withLocalIdentifiers: [id], options: fetchOptions).firstObject
     }
     
     func fetchImage(for album: PHAssetCollection, context: NSManagedObjectContext, completion: @escaping (MemeContainer?) -> Void) {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 1
 //        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
+        assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
+        nextAssetToFetch = 0
         
-        guard let asset = assets.firstObject else { return completion(nil) }
+        guard let asset = assets?.firstObject,
+              let meme = getNextAssetMeme(context: context) else { return completion(nil) }
         
-        let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id = %@", asset.localIdentifier)
-        let memes = try? context.fetch(fetchRequest)
-        
-        let meme: Meme
-        if let firstMeme = memes?.first {
-            meme = firstMeme
-            if let container = images[meme] {
-                self.memes = [meme]
-                return completion(container)
-            }
-        } else {
-            meme = Meme(context: context)
-            meme.id = asset.localIdentifier
-            try? context.save()
-        }
-        
-        self.memes = [meme]
+        getNextAssetMeme(context: context)
         
         fetchImage(for: asset) { image in
             guard let image = image else { return completion(nil) }

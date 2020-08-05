@@ -9,6 +9,7 @@ import SwiftUI
 import Photos
 
 struct MemeView: View {
+    @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var memeController: MemeController
     @EnvironmentObject var providerController: ProviderController
     @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
@@ -31,9 +32,13 @@ struct MemeView: View {
                             .foregroundColor(.gray)
                             .padding(memeController.images[meme] == nil ? (proxy.size.width - 40) / 2 : 0)
                             .border(Color(.cyan), width: 2)
+                        // Remove this and uncomment tabViewStyle when Apple fixes PageTabViewStyle
+                            .tabItem {
+                                Text(meme.name ?? "Meme")
+                            }
                     }
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+//                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .frame(width: proxy.size.width,
                        height: proxy.size.width < (proxy.size.height - 52) ? proxy.size.width : (proxy.size.height - 52))
                 
@@ -59,5 +64,12 @@ struct MemeView: View {
         .border(Color(.green), width: 2)
         .navigationBarTitle("Meme")
         .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: currentMeme) { meme in
+            if memeController.assets != nil,
+               meme == memeController.memes.last,
+               let nextMeme = memeController.getNextAssetMeme(context: moc) {
+                memeController.fetchImage(for: nextMeme)
+            }
+        }
     }
 }

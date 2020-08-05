@@ -30,13 +30,17 @@ struct MemesView: View {
                     }
                 }
             }
-            .onChange(of: selectedMeme) { meme in
-                if meme == nil {
-                    memeController.load(memes)
-                }
-            }
+            .onDelete(perform: { indexSet in
+                guard let index = indexSet.first else { return }
+                memeController.delete(meme: memes[index], context: moc)
+            })
         }
         .navigationTitle("Memes")
+        .onChange(of: selectedMeme) { meme in
+            if meme != nil {
+                memeController.load(memes)
+            }
+        }
     }
 }
 

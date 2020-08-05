@@ -12,31 +12,27 @@ struct MemesView: View {
     @EnvironmentObject var memeController: MemeController
     @FetchRequest(entity: Meme.entity(), sortDescriptors: []) var memes: FetchedResults<Meme>
     
+    @State var selectedMeme: Meme?
+    
     var body: some View {
         List {
             ForEach(memes, id: \.self) { meme in
-                NavigationLink(destination: MemeView(startingMeme: meme)) {
-                    //TODO: Ensure this is running lazily / update it to be work lazily
-                    if let container = memeController.container(for: meme) {
-                        Image(uiImage: container.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 64,
-                                   height: container.thumbnailHeight)
-                        VStack {
-                            Text(meme.name ?? "[No name]")
-                            if let destination = meme.destination {
-                                Text(destination.name ?? "")
-                                    .font(.caption)
-                            }
-                        }
-                    } else {
+                NavigationLink(destination: MemeView(startingMeme: meme), tag: meme, selection: $selectedMeme) {
+                    Image(memeContainer: memeController.container(for: meme))?
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 64,
+                               height: memeController.container(for: meme)?.thumbnailHeight ?? 64)
+                    VStack(alignment: .leading) {
                         Text(meme.name ?? "[No name]")
-                            .onAppear {
-                                //TODO: remove this whole onAppear and load the fetchedResults when the NavigationLink changes
-                                memeController.load(memes)
-                            }
+                        Text(optionalString: meme.destination?.name)
+                            .font(.caption)
                     }
+                }
+            }
+            .onChange(of: selectedMeme) { meme in
+                if meme == nil {
+                    memeController.load(memes)
                 }
             }
         }

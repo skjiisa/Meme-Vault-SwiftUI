@@ -16,4 +16,9 @@ extension Image {
         }
         let _ = self.tag(meme)
     }
+    
+    init?(memeContainer: MemeContainer?) {
+        guard let memeContainer = memeContainer else { return nil }
+        self.init(uiImage: memeContainer.image)
+    }
 }

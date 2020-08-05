@@ -76,6 +76,7 @@ class MemeController: ObservableObject {
         if let firstMeme = memes?.first {
             meme = firstMeme
             if let container = images[meme] {
+                self.memes = [meme]
                 return completion(container)
             }
         } else {

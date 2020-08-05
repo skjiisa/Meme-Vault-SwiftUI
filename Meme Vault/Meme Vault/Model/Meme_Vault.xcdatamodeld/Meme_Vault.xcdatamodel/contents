@@ -4,7 +4,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="path" optional="YES" attributeType="String"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Destination" inverseName="parent" inverseEntity="Destination"/>
-        <relationship name="memes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Meme" inverseName="destination" inverseEntity="Meme"/>
+        <relationship name="memes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meme" inverseName="destination" inverseEntity="Meme"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="children" inverseEntity="Destination"/>
     </entity>
     <entity name="Meme" representedClassName="Meme" syncable="YES" codeGenerationType="class">
@@ -13,7 +13,7 @@
         <relationship name="destination" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="memes" inverseEntity="Destination"/>
     </entity>
     <elements>
-        <element name="Meme" positionX="-63" positionY="-18" width="128" height="88"/>
         <element name="Destination" positionX="-63" positionY="0" width="128" height="118"/>
+        <element name="Meme" positionX="-63" positionY="-18" width="128" height="88"/>
     </elements>
 </model>

@@ -40,7 +40,7 @@ struct MemeView: View {
                 }
 //                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .frame(width: proxy.size.width,
-                       height: proxy.size.width < (proxy.size.height - 52) ? proxy.size.width : (proxy.size.height - 52))
+                       height: min(proxy.size.width, abs(proxy.size.height - 52)))
                 
                 HStack {
                     TextField("Name", text: $currentMeme.wrappedName)
@@ -66,9 +66,8 @@ struct MemeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: currentMeme) { meme in
             if memeController.assets != nil,
-               meme == memeController.memes.last,
-               let nextMeme = memeController.getNextAssetMeme(context: moc) {
-                memeController.fetchImage(for: nextMeme)
+               meme == memeController.memes.last {
+                memeController.getNextAssetMeme(context: moc)
             }
         }
     }

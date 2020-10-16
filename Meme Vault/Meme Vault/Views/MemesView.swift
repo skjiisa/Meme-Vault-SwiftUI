@@ -39,8 +39,9 @@ struct MemesView: View {
         }
         .navigationTitle("Memes")
         .onChange(of: selectedMeme) { meme in
-            if meme != nil {
+            if let meme = meme {
                 memeController.load(memes)
+                memeController.currentMeme = meme
             }
         }
     }

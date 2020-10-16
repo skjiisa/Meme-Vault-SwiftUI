@@ -28,21 +28,19 @@ struct AlbumsView: View {
     var body: some View {
         List {
             ForEach(0..<albums.count) { index in
-                Button {
-                    memeController.fetchImages(for: albums.object(at: index), context: moc)
-                    currentCollection = index
-                } label: {
-                    NavigationLink(destination: MemeView(), tag: index, selection: $currentCollection) {
-                        HStack {
-                            Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
-                        }
+                NavigationLink(destination: MemeView(), tag: index, selection: $currentCollection) {
+                    HStack {
+                        Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
                     }
                 }
             }
         }
         .navigationBarTitle("Albums")
         .onChange(of: currentCollection) { index in
-            if index == nil {
+            if let index = index {
+                memeController.fetchImages(for: albums.object(at: index), context: moc)
+                currentCollection = index
+            } else {
                 memeController.assets = nil
             }
         }

@@ -10,9 +10,11 @@ import Photos
 
 struct MemeView: View {
     @Environment(\.managedObjectContext) var moc
+    @Environment(\.presentationMode) var presentationMode
+    @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
+    
     @EnvironmentObject var memeController: MemeController
     @EnvironmentObject var providerController: ProviderController
-    @FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = nil")) var destinations: FetchedResults<Destination>
     
     var body: some View {
         GeometryReader { proxy in
@@ -39,6 +41,11 @@ struct MemeView: View {
         .onAppear {
             if memeController.currentMeme == nil {
                 memeController.currentMeme = memeController.memes.first
+            }
+        }
+        .onDisappear {
+            if !presentationMode.wrappedValue.isPresented {
+                memeController.currentMeme = nil
             }
         }
     }

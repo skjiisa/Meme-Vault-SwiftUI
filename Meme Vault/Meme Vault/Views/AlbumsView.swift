@@ -16,8 +16,7 @@ struct AlbumsView: View {
     @EnvironmentObject var memeController: MemeController
     
     @State private var albums: PHFetchResult<PHAssetCollection>
-    @State private var selectedMeme: MemeContainer?
-    @State private var currentImage: Int?
+    @State private var currentCollection: Int?
     
     init() {
         let options = PHFetchOptions()
@@ -30,12 +29,10 @@ struct AlbumsView: View {
         List {
             ForEach(0..<albums.count) { index in
                 Button {
-                    memeController.fetchImage(for: albums.object(at: index), context: moc) { memeContainer in
-                        selectedMeme = memeContainer
-                        currentImage = selectedMeme == nil ? nil : index
-                    }
+                    memeController.fetchImages(for: albums.object(at: index), context: moc)
+                    currentCollection = index
                 } label: {
-                    NavigationLink(destination: MemeView(startingMeme: selectedMeme?.meme), tag: index, selection: $currentImage) {
+                    NavigationLink(destination: MemeView(), tag: index, selection: $currentCollection) {
                         HStack {
                             Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
                         }
@@ -44,7 +41,7 @@ struct AlbumsView: View {
             }
         }
         .navigationBarTitle("Albums")
-        .onChange(of: currentImage) { index in
+        .onChange(of: currentCollection) { index in
             if index == nil {
                 memeController.assets = nil
             }

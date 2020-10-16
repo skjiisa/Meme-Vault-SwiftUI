@@ -17,12 +17,14 @@ struct MemesView: View {
     var body: some View {
         List {
             ForEach(memes, id: \.self) { meme in
-                NavigationLink(destination: MemeView(startingMeme: meme), tag: meme, selection: $selectedMeme) {
-                    Image(memeContainer: memeController.container(for: meme))?
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 64,
-                               height: memeController.container(for: meme)?.thumbnailHeight ?? 64)
+                NavigationLink(destination: MemeView(), tag: meme, selection: $selectedMeme) {
+                    if let image = memeController.images[meme] {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 64,
+                                   height: 64 * min(1, image.size.height / image.size.width))
+                    }
                     VStack(alignment: .leading) {
                         Text(meme.name ?? "[No name]")
                         Text(optionalString: meme.destination?.name)

@@ -8,17 +8,11 @@
 import SwiftUI
 
 extension Image {
-    init(uiImage: UIImage?, orSystemName systemName: String, meme: Meme) {
+    init(uiImage: UIImage?, orSystemName systemName: String) {
         if let uiImage = uiImage {
             self.init(uiImage: uiImage)
         } else {
             self.init(systemName: systemName)
         }
-        let _ = self.tag(meme)
-    }
-    
-    init?(memeContainer: MemeContainer?) {
-        guard let memeContainer = memeContainer else { return nil }
-        self.init(uiImage: memeContainer.image)
     }
 }

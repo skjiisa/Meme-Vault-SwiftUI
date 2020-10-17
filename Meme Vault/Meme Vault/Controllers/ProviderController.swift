@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Photos
+import CoreData
 import FilesProvider
 
 class ProviderController: ObservableObject {
@@ -98,7 +99,7 @@ class ProviderController: ObservableObject {
     
     //MARK: Networking
     
-    func upload(_ meme: Meme, memeController: MemeController) {
+    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext) {
         guard let destinationPath = meme.destination?.path else { return }
         memeController.fetchImageData(for: meme) { imageData, dataUTI in
             guard let imageData = imageData,
@@ -125,7 +126,10 @@ class ProviderController: ObservableObject {
                         return NSLog("\(error)")
                     }
                     
-                    // Mark the meme as uploaded
+                    DispatchQueue.main.async {
+                        meme.uploaded = true
+                        try? context.save()
+                    }
                 })
             } catch {
                 NSLog("\(error)")

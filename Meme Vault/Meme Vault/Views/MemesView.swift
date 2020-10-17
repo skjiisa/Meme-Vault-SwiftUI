@@ -16,7 +16,7 @@ struct MemesView: View {
     
     var body: some View {
         List {
-            ForEach(memes, id: \.self) { meme in
+            ForEach(memes) { meme in
                 NavigationLink(destination: MemeView(), tag: meme, selection: $selectedMeme) {
                     if let image = memeController.images[meme] {
                         Image(uiImage: image)
@@ -25,10 +25,17 @@ struct MemesView: View {
                             .frame(width: 64,
                                    height: 64 * min(1, image.size.height / image.size.width))
                     }
+                    
                     VStack(alignment: .leading) {
                         Text(meme.name ?? "[No name]")
                         Text(optionalString: meme.destination?.name)
                             .font(.caption)
+                    }
+                    
+                    if meme.uploaded {
+                        Spacer()
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.accentColor)
                     }
                 }
             }

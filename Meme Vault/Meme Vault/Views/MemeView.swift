@@ -86,12 +86,14 @@ struct ImageView: View {
 }
 
 struct MemeForm: View {
-    @EnvironmentObject var memeController: MemeController
-    @EnvironmentObject var providerController: ProviderController
+    @Environment(\.managedObjectContext) var moc
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)],
         predicate: NSPredicate(format: "parent = nil"))
     var destinations: FetchedResults<Destination>
+    
+    @EnvironmentObject var memeController: MemeController
+    @EnvironmentObject var providerController: ProviderController
     
     @ObservedObject var meme: Meme
     
@@ -101,14 +103,14 @@ struct MemeForm: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.leading)
             Button("Upload") {
-                providerController.upload(meme, memeController: memeController)
+                providerController.upload(meme, memeController: memeController, context: moc)
             }
             .padding(.trailing)
             .disabled(meme.destination == nil)
         }
         
         List {
-            ForEach(destinations, id: \.self) { destination in
+            ForEach(destinations) { destination in
                 DestinationDisclosure(chosenDestination: $meme.destination, destination: destination)
             }
         }

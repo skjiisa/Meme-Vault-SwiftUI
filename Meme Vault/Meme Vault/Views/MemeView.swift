@@ -47,6 +47,7 @@ struct MemeView: View {
             if !presentationMode.wrappedValue.isPresented {
                 memeController.currentMeme = nil
             }
+            try? moc.save()
         }
     }
 }
@@ -99,7 +100,9 @@ struct MemeForm: View {
     
     var body: some View {
         HStack {
-            TextField("Name", text: $meme.wrappedName)
+            TextField("Name", text: $meme.wrappedName, onCommit: {
+                meme.modified = Date()
+            })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.leading)
             Button("Upload") {
@@ -111,7 +114,7 @@ struct MemeForm: View {
         
         List {
             ForEach(destinations) { destination in
-                DestinationDisclosure(chosenDestination: $meme.destination, destination: destination)
+                DestinationDisclosure(chosenDestination: $meme.destination, destination: destination, meme: meme)
             }
         }
     }

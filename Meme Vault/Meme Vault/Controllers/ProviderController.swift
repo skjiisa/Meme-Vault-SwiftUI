@@ -128,6 +128,7 @@ class ProviderController: ObservableObject {
                     
                     DispatchQueue.main.async {
                         meme.uploaded = true
+                        meme.modified = Date()
                         try? context.save()
                     }
                 })

@@ -16,8 +16,9 @@ struct DestinationDisclosure: View {
     @Binding var chosenDestination: Destination?
     
     let destination: Destination
+    var meme: Meme?
     
-    init(chosenDestination: Binding<Destination?>, destination: Destination) {
+    init(chosenDestination: Binding<Destination?>, destination: Destination, meme: Meme? = nil) {
         _chosenDestination = chosenDestination
         self.destination = destination
         
@@ -32,6 +33,7 @@ struct DestinationDisclosure: View {
         } label: {
             Button(destination.name ?? "Destination") {
                 chosenDestination = destination
+                meme?.modified = Date()
             }
             .disabled(chosenDestination == destination)
         }

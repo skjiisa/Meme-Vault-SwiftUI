@@ -70,8 +70,7 @@ class MemeController: ObservableObject {
         if let firstMeme = memes?.first {
             return firstMeme
         } else {
-            let meme = Meme(context: context)
-            meme.id = asset.localIdentifier
+            let meme = Meme(id: asset.localIdentifier, context: context)
             try? context.save()
             return meme
         }
@@ -114,8 +113,7 @@ class MemeController: ObservableObject {
             if let meme = memesByID[asset.localIdentifier] {
                 memes.append(meme)
             } else {
-                let meme = Meme(context: context)
-                meme.id = asset.localIdentifier
+                let meme = Meme(id: asset.localIdentifier, context: context)
                 memes.append(meme)
             }
             nextAssetToFetch += 1

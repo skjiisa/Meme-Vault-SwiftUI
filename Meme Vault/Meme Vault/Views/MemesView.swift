@@ -10,7 +10,10 @@ import SwiftUI
 struct MemesView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var memeController: MemeController
-    @FetchRequest(entity: Meme.entity(), sortDescriptors: []) var memes: FetchedResults<Meme>
+    @FetchRequest(
+        entity: Meme.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)])
+    var memes: FetchedResults<Meme>
     
     @State var selectedMeme: Meme?
     

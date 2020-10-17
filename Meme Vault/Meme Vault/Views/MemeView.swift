@@ -106,7 +106,13 @@ struct MemeForm: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.leading)
             Button("Upload") {
-                providerController.upload(meme, memeController: memeController, context: moc)
+                providerController.upload(meme, memeController: memeController, context: moc) { success in
+                    if success {
+                        DispatchQueue.main.async {
+                            memeController.nextMeme()
+                        }
+                    }
+                }
             }
             .padding(.trailing)
             .disabled(meme.destination == nil)

@@ -99,12 +99,12 @@ class ProviderController: ObservableObject {
     
     //MARK: Networking
     
-    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext) {
-        guard let destinationPath = meme.destination?.path else { return }
+    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext, completion: @escaping (Bool) -> Void) {
+        guard let destinationPath = meme.destination?.path else { return completion(false) }
         memeController.fetchImageData(for: meme) { imageData, dataUTI in
             guard let imageData = imageData,
                   let dataUTI = dataUTI,
-                  let typeURL = URL(string: dataUTI) else { return }
+                  let typeURL = URL(string: dataUTI) else { return completion(false) }
             
             let filename: String
             if let name = meme.name,
@@ -123,17 +123,20 @@ class ProviderController: ObservableObject {
                 
                 self.webdavProvider?.copyItem(localFile: tempFile, to: path, overwrite: true, completionHandler: { error in
                     if let error = error {
-                        return NSLog("\(error)")
+                        NSLog("\(error)")
+                        return completion(false)
                     }
                     
                     DispatchQueue.main.async {
                         meme.uploaded = true
                         meme.modified = Date()
                         try? context.save()
+                        completion(true)
                     }
                 })
             } catch {
                 NSLog("\(error)")
+                completion(false)
             }
         }
     }

@@ -33,11 +33,20 @@ class MemeController: ObservableObject {
         }
     }
     
-    //MARK: Getting Meme Containers
+    //MARK: Navigation
     
     func load(_ fetchedMemes: FetchedResults<Meme>) {
         memes = Array(fetchedMemes)
         assets = nil
+    }
+    
+    func nextMeme() {
+        guard let currentMeme = currentMeme,
+              let index = memes.firstIndex(of: currentMeme),
+              index < memes.endIndex else { return }
+        withAnimation {
+            self.currentMeme = memes[index + 1]
+        }
     }
     
     //MARK: Fetching Images

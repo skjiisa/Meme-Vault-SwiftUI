@@ -16,6 +16,7 @@ class MemeController: ObservableObject {
     @Published var images: [Meme: UIImage] = [:]
     @Published var memes: [Meme] = []
     @Published var currentMeme: Meme?
+    @Published var excludedAlbums: Set<PHAssetCollection> = []
     
     var assets: PHFetchResult<PHAsset>?
     var nextAssetToFetch: Int = 0
@@ -176,6 +177,16 @@ class MemeController: ObservableObject {
     func fetchImageData(for meme: Meme, completion: @escaping (Data?, String?) -> Void) {
         guard let asset = fetchAsset(for: meme) else { return completion(nil,nil) }
         fetchImageData(for: asset, completion: completion)
+    }
+    
+    //MARK: Albums
+    
+    func toggle(_ album: PHAssetCollection) {
+        if excludedAlbums.contains(album) {
+            excludedAlbums.remove(album)
+        } else {
+            excludedAlbums.insert(album)
+        }
     }
     
 }

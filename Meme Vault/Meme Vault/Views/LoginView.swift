@@ -41,7 +41,7 @@ struct LoginView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("WebDAV Server URL")) {
+            Section(header: Text("WebDAV Server URL"), footer: Text("Server must support SSL (HTTPS).")) {
                 TextField("https://nextcloud.example.com/", text: $url)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)

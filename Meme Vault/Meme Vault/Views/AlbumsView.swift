@@ -18,20 +18,35 @@ struct AlbumsView: View {
     @State private var albums: PHFetchResult<PHAssetCollection>
     @State private var currentCollection: Int?
     
-    init() {
+    var exclude: Bool
+    
+    init(exclude: Bool = false) {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: options)
         _albums = .init(initialValue: albums)
+        
+        self.exclude = exclude
     }
     
     var body: some View {
         List {
             ForEach(0..<albums.count) { index in
-                NavigationLink(destination: MemeView(), tag: index, selection: $currentCollection) {
+                let title = albums.object(at: index).localizedTitle ?? "Unknown Album"
+                
+                if exclude {
                     HStack {
-                        Text(albums.object(at: index).localizedTitle ?? "Unknown Album")
+                        Button(title) {
+                            memeController.toggle(albums.object(at: index))
+                        }
+                        if memeController.excludedAlbums.contains(albums.object(at: index)) {
+                            Spacer()
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
                     }
+                } else {
+                    NavigationLink(title, destination: MemeView(), tag: index, selection: $currentCollection)
                 }
             }
         }

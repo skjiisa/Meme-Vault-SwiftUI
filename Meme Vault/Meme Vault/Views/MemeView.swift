@@ -109,6 +109,7 @@ struct MemeForm: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.leading)
             Button("Upload") {
+                dismissKeyboard()
                 providerController.upload(meme, memeController: memeController, context: moc) { success in
                     if success {
                         DispatchQueue.main.async {

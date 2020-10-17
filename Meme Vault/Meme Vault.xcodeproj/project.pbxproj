@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 591DC3C424CD19B800CDA06D /* Meme_Vault.xcdatamodeld */; };
 		59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59581A6524D3B931007E5284 /* DestinationDisclosure.swift */; };
+		59838CD1253B884100E21D9A /* View+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59838CD0253B884100E21D9A /* View+Keyboard.swift */; };
+		599A9118253B597E007B674D /* Bool+Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599A9117253B597E007B674D /* Bool+Number.swift */; };
 		599E43A024D35C75001C8597 /* MemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E439F24D35C75001C8597 /* MemesView.swift */; };
 		599E43A224D35EAD001C8597 /* MemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43A124D35EAD001C8597 /* MemeController.swift */; };
 		599E43A524D36C06001C8597 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43A424D36C06001C8597 /* ProviderController.swift */; };
@@ -25,14 +27,19 @@
 		59A2682424C903EE0056282C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59A2682324C903EE0056282C /* Preview Assets.xcassets */; };
 		59A2682E24C90B380056282C /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A2682D24C90B380056282C /* AlbumsView.swift */; };
 		59A2683024C90D180056282C /* MemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A2682F24C90D180056282C /* MemeView.swift */; };
-		59A7A62724D4DE5D002E6455 /* MemeContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A7A62624D4DE5D002E6455 /* MemeContainer.swift */; };
+		59B668B424DA34630055E71C /* Text+Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B668B324DA34630055E71C /* Text+Optional.swift */; };
 		59C0AD9024CD250600979F59 /* Meme_Vault+Wrapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */; };
 		59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD9324CD424200979F59 /* SettingsView.swift */; };
+		59CC2FC6253A8A7200C25DC3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */; };
+		59CC2FC9253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */; };
+		59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E009E324D7DA04001F8A31 /* Image+Meme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		591DC3C524CD19B800CDA06D /* Meme_Vault.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Meme_Vault.xcdatamodel; sourceTree = "<group>"; };
 		59581A6524D3B931007E5284 /* DestinationDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDisclosure.swift; sourceTree = "<group>"; };
+		59838CD0253B884100E21D9A /* View+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Keyboard.swift"; sourceTree = "<group>"; };
+		599A9117253B597E007B674D /* Bool+Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Number.swift"; sourceTree = "<group>"; };
 		599E439F24D35C75001C8597 /* MemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesView.swift; sourceTree = "<group>"; };
 		599E43A124D35EAD001C8597 /* MemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeController.swift; sourceTree = "<group>"; };
 		599E43A424D36C06001C8597 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
@@ -50,9 +57,12 @@
 		59A2682524C903EE0056282C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		59A2682D24C90B380056282C /* AlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsView.swift; sourceTree = "<group>"; };
 		59A2682F24C90D180056282C /* MemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeView.swift; sourceTree = "<group>"; };
-		59A7A62624D4DE5D002E6455 /* MemeContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeContainer.swift; sourceTree = "<group>"; };
+		59B668B324DA34630055E71C /* Text+Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Optional.swift"; sourceTree = "<group>"; };
 		59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Wrapping.swift"; sourceTree = "<group>"; };
 		59C0AD9324CD424200979F59 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Convenience.swift"; sourceTree = "<group>"; };
+		59E009E324D7DA04001F8A31 /* Image+Meme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Meme.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +90,11 @@
 			isa = PBXGroup;
 			children = (
 				599E43AB24D37325001C8597 /* AlertRepresentation.swift */,
+				59838CD0253B884100E21D9A /* View+Keyboard.swift */,
+				59E009E324D7DA04001F8A31 /* Image+Meme.swift */,
+				59B668B324DA34630055E71C /* Text+Optional.swift */,
+				599A9117253B597E007B674D /* Bool+Number.swift */,
+				59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -127,9 +142,9 @@
 			isa = PBXGroup;
 			children = (
 				591DC3C424CD19B800CDA06D /* Meme_Vault.xcdatamodeld */,
+				59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */,
 				59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */,
 				599E43B424D3AEF0001C8597 /* FilesContainer.swift */,
-				59A7A62624D4DE5D002E6455 /* MemeContainer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -227,17 +242,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				59A2683024C90D180056282C /* MemeView.swift in Sources */,
-				59A7A62724D4DE5D002E6455 /* MemeContainer.swift in Sources */,
 				599E43B124D383E0001C8597 /* DestinationView.swift in Sources */,
+				599A9118253B597E007B674D /* Bool+Number.swift in Sources */,
 				59A2681F24C903ED0056282C /* ContentView.swift in Sources */,
 				599E43A524D36C06001C8597 /* ProviderController.swift in Sources */,
 				599E43AF24D379E8001C8597 /* DestinationsView.swift in Sources */,
 				599E43AC24D37325001C8597 /* AlertRepresentation.swift in Sources */,
 				599E43B324D3A1C3001C8597 /* FileBrowserView.swift in Sources */,
+				59CC2FC9253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift in Sources */,
+				59B668B424DA34630055E71C /* Text+Optional.swift in Sources */,
 				59C0AD9024CD250600979F59 /* Meme_Vault+Wrapping.swift in Sources */,
 				59A2681D24C903ED0056282C /* Meme_VaultApp.swift in Sources */,
 				599E43B524D3AEF1001C8597 /* FilesContainer.swift in Sources */,
 				599E43A024D35C75001C8597 /* MemesView.swift in Sources */,
+				59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */,
+				59CC2FC6253A8A7200C25DC3 /* Identifiable.swift in Sources */,
+				59838CD1253B884100E21D9A /* View+Keyboard.swift in Sources */,
 				59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */,
 				591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */,
 				599E43AA24D36D07001C8597 /* LoginView.swift in Sources */,

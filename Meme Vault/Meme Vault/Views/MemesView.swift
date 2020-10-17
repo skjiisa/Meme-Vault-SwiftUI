@@ -10,35 +10,50 @@ import SwiftUI
 struct MemesView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var memeController: MemeController
-    @FetchRequest(entity: Meme.entity(), sortDescriptors: []) var memes: FetchedResults<Meme>
+    @FetchRequest(
+        entity: Meme.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)])
+    var memes: FetchedResults<Meme>
+    
+    @State var selectedMeme: Meme?
     
     var body: some View {
         List {
-            ForEach(memes, id: \.self) { meme in
-                if let container = memeController.images[meme] {
-                    NavigationLink(destination: MemeView(memeContainer: container), label: {
-                        Image(uiImage: container.image)
+            ForEach(memes) { meme in
+                NavigationLink(destination: MemeView(), tag: meme, selection: $selectedMeme) {
+                    if let image = memeController.images[meme] {
+                        Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 64,
-                                   height: container.thumbnailHeight)
-                        VStack {
-                            Text(meme.name ?? "[No name]")
-                            if let destination = meme.destination {
-                                Text(destination.name ?? "")
-                                    .font(.caption)
-                            }
-                        }
-                    })
-                } else {
-                    Text(meme.name ?? "[No name]")
-                        .onAppear {
-                            memeController.fetchImage(for: meme)
-                        }
+                                   height: 64 * min(1, image.size.height / image.size.width))
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(meme.name ?? "[No name]")
+                        Text(optionalString: meme.destination?.name)
+                            .font(.caption)
+                    }
+                    
+                    if meme.uploaded {
+                        Spacer()
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.accentColor)
+                    }
                 }
             }
+            .onDelete(perform: { indexSet in
+                guard let index = indexSet.first else { return }
+                memeController.delete(meme: memes[index], context: moc)
+            })
         }
         .navigationTitle("Memes")
+        .onChange(of: selectedMeme) { meme in
+            if let meme = meme {
+                memeController.load(memes)
+                memeController.currentMeme = meme
+            }
+        }
     }
 }
 

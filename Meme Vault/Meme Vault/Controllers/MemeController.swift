@@ -11,7 +11,43 @@ import SwiftUI
 
 class MemeController: ObservableObject {
     
-    @Published var images: [Meme: MemeContainer] = [:]
+    //MARK: Properties
+    
+    @Published var images: [Meme: UIImage] = [:]
+    @Published var memes: [Meme] = []
+    @Published var currentMeme: Meme?
+    
+    var assets: PHFetchResult<PHAsset>?
+    var nextAssetToFetch: Int = 0
+    
+    private var fetchQueue = Set<Meme>()
+    
+    //MARK: Meme CRUD
+    
+    func delete(meme: Meme, context: NSManagedObjectContext) {
+        context.delete(meme)
+        do {
+            try context.save()
+        } catch {
+            NSLog("\(error)")
+        }
+    }
+    
+    //MARK: Navigation
+    
+    func load(_ fetchedMemes: FetchedResults<Meme>) {
+        memes = Array(fetchedMemes)
+        assets = nil
+    }
+    
+    func nextMeme() {
+        guard let currentMeme = currentMeme,
+              let index = memes.firstIndex(of: currentMeme),
+              index < memes.endIndex - 1 else { return }
+        self.currentMeme = memes[index + 1]
+    }
+    
+    //MARK: Fetching Images
     
     func fetchImageData(for asset: PHAsset, completion: @escaping (Data?, String?) -> Void) {
         let options = PHImageRequestOptions()
@@ -32,43 +68,92 @@ class MemeController: ObservableObject {
         }
     }
     
+    func getMeme(for asset: PHAsset, context: NSManagedObjectContext) -> Meme {
+        let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id = %@", asset.localIdentifier)
+        fetchRequest.fetchLimit = 1
+        let memes = try? context.fetch(fetchRequest)
+        
+        if let firstMeme = memes?.first {
+            return firstMeme
+        } else {
+            let meme = Meme(id: asset.localIdentifier, context: context)
+            try? context.save()
+            return meme
+        }
+    }
+    
+    @discardableResult
+    func getNextAssetMeme(context: NSManagedObjectContext) -> Meme? {
+        guard nextAssetToFetch < assets?.count ?? 0,
+              let asset = assets?.object(at: nextAssetToFetch) else { return nil }
+        
+        let meme = getMeme(for: asset, context: context)
+        
+        if nextAssetToFetch == 0 {
+            memes = [meme]
+        } else {
+            memes.append(meme)
+        }
+        nextAssetToFetch += 1
+        return meme
+    }
+    
+    func getNextAssetMemes(count: Int, context: NSManagedObjectContext) {
+        let indexSet = IndexSet(nextAssetToFetch ..< min(nextAssetToFetch + count, assets?.count ?? nextAssetToFetch))
+        guard nextAssetToFetch < assets?.count ?? 0,
+              let assets = self.assets?.objects(at: indexSet) else { return }
+        
+        let assetIDs = assets.map { $0.localIdentifier }
+        
+        let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id IN %@", assetIDs)
+        let existingMemes = try? context.fetch(fetchRequest)
+        
+        var memesByID: [String: Meme] = [:]
+        for meme in existingMemes ?? [] {
+            guard let id = meme.id else { continue }
+            memesByID[id] = meme
+        }
+        
+        for asset in assets {
+            if let meme = memesByID[asset.localIdentifier] {
+                memes.append(meme)
+            } else {
+                let meme = Meme(id: asset.localIdentifier, context: context)
+                memes.append(meme)
+            }
+            nextAssetToFetch += 1
+        }
+        
+        try? context.save()
+    }
+    
     func fetchAsset(for meme: Meme) -> PHAsset? {
+        guard let id = meme.id else { return nil }
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = 1
         
-        guard let id = meme.id else { return nil }
         return PHAsset.fetchAssets(withLocalIdentifiers: [id], options: fetchOptions).firstObject
     }
     
-    func fetchImage(for album: PHAssetCollection, context: NSManagedObjectContext, completion: @escaping (MemeContainer?) -> Void) {
+    func fetchImages(for album: PHAssetCollection, context: NSManagedObjectContext) {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 1
 //        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
+        assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
+        nextAssetToFetch = 0
         
-        guard let asset = assets.firstObject else { return completion(nil) }
+        guard let asset = assets?.firstObject,
+              let meme = getNextAssetMeme(context: context) else { return }
         
-        let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id = %@", asset.localIdentifier)
-        let memes = try? context.fetch(fetchRequest)
+        // Since SwiftUI is had a bug and won't new Memes into the TabView,
+        // load up 20 at the start.
+        getNextAssetMemes(count: 20, context: context)
         
-        let meme: Meme
-        if let firstMeme = memes?.first {
-            meme = firstMeme
-            if let container = images[meme] {
-                return completion(container)
-            }
-        } else {
-            meme = Meme(context: context)
-            meme.id = asset.localIdentifier
-            try? context.save()
-        }
-        
+        // Fetch the first image
         fetchImage(for: asset) { image in
-            guard let image = image else { return completion(nil) }
-            let container = MemeContainer(meme: meme, image: image)
-            self.images[meme] = container
-            completion(container)
+            guard let image = image else { return }
+            self.images[meme] = image
         }
     }
     
@@ -78,10 +163,13 @@ class MemeController: ObservableObject {
     }
     
     func fetchImage(for meme: Meme) {
-        guard images[meme] == nil else { return }
+        guard images[meme] == nil,
+              !fetchQueue.contains(meme) else { return }
+        fetchQueue.insert(meme)
         fetchImage(for: meme) { image in
+            self.fetchQueue.remove(meme)
             guard let image = image else { return }
-            self.images[meme] = MemeContainer(meme: meme, image: image)
+            self.images[meme] = image
         }
     }
     

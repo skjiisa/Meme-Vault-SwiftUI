@@ -7,9 +7,13 @@
 
 import SwiftUI
 import Photos
+import CoreData
 import FilesProvider
 
 class ProviderController: ObservableObject {
+    
+    //MARK: Properties
+    
     private(set) var webdavProvider: WebDAVFileProvider?
     
     private(set) var host: URL?
@@ -17,6 +21,9 @@ class ProviderController: ObservableObject {
     
     private var uploadQueue: [String: Meme] = [:]
     private var contentRequestIDs: [PHAsset: PHContentEditingInputRequestID] = [:]
+    
+    private var memes: [String: Meme] = [:]
+    @Published var uploadProgress: [Meme: Float] = [:]
     
     init() {
         host = UserDefaults.standard.url(forKey: "host")
@@ -80,14 +87,30 @@ class ProviderController: ObservableObject {
         return path + "/" + directory
     }
     
+    func ssl(_ url: String) -> String {
+        if url.hasPrefix("https://") {
+            return url
+        }
+        
+        if url.hasPrefix("http://") {
+            var newURL = url
+            if let index = newURL.firstIndex(of: ":") {
+                newURL.insert("s", at: index)
+                return newURL
+            }
+        }
+        
+        return "https://" + url
+    }
+    
     //MARK: Networking
     
-    func upload(_ meme: Meme, memeController: MemeController) {
-        guard let destinationPath = meme.destination?.path else { return }
+    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext, completion: @escaping (Bool) -> Void) {
+        guard let destinationPath = meme.destination?.path else { return completion(false) }
         memeController.fetchImageData(for: meme) { imageData, dataUTI in
             guard let imageData = imageData,
                   let dataUTI = dataUTI,
-                  let typeURL = URL(string: dataUTI) else { return }
+                  let typeURL = URL(string: dataUTI) else { return completion(false) }
             
             let filename: String
             if let name = meme.name,
@@ -104,15 +127,30 @@ class ProviderController: ObservableObject {
                 let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
                 try imageData.write(to: tempFile)
                 
+                self.memes[tempFile.path] = meme
+                
                 self.webdavProvider?.copyItem(localFile: tempFile, to: path, overwrite: true, completionHandler: { error in
-                    if let error = error {
-                        return NSLog("\(error)")
+                    DispatchQueue.main.async {
+                        try? FileManager.default.removeItem(at: tempFile)
+                        self.memes.removeValue(forKey: tempFile.path)
+                        self.uploadProgress.removeValue(forKey: meme)
                     }
                     
-                    // Mark the meme as uploaded
+                    if let error = error {
+                        NSLog("\(error)")
+                        return completion(false)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        meme.uploaded = true
+                        meme.modified = Date()
+                        try? context.save()
+                        completion(true)
+                    }
                 })
             } catch {
                 NSLog("\(error)")
+                completion(false)
             }
         }
     }
@@ -158,6 +196,14 @@ extension ProviderController: FileProviderDelegate {
             print("Downloading \(source) to \((dest as NSString).lastPathComponent): \(progress * 100) completed.")
         case .copy(source: let source, destination: let dest) where source.hasPrefix("file://"):
             print("Uploading \((source as NSString).lastPathComponent) to \(dest): \(progress * 100) completed.")
+            
+            // Log the progress
+            let tempFile = String(source.dropFirst(7))
+            if let meme = memes[tempFile] {
+                withAnimation {
+                    uploadProgress[meme] = progress
+                }
+            }
         case .copy(source: let source, destination: let dest):
             print("Copy \(source) to \(dest): \(progress * 100) completed.")
         default:

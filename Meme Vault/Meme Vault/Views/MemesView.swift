@@ -12,7 +12,8 @@ struct MemesView: View {
     @EnvironmentObject var memeController: MemeController
     @FetchRequest(
         entity: Meme.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)])
+        sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)],
+        predicate: NSPredicate(format: "name != nil OR destination != nil"))
     var memes: FetchedResults<Meme>
     
     @State var selectedMeme: Meme?
@@ -21,24 +22,26 @@ struct MemesView: View {
         List {
             ForEach(memes) { meme in
                 NavigationLink(destination: MemeView(), tag: meme, selection: $selectedMeme) {
-                    if let image = memeController.images[meme] {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 64,
-                                   height: 64 * min(1, image.size.height / image.size.width))
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text(meme.name ?? "[No name]")
-                        Text(optionalString: meme.destination?.name)
-                            .font(.caption)
-                    }
-                    
-                    if meme.uploaded {
-                        Spacer()
-                        Image(systemName: "checkmark")
-                            .foregroundColor(.accentColor)
+                    HStack {
+                        if let image = memeController.images[meme] {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 64,
+                                       height: 64 * min(1, image.size.height / image.size.width))
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(meme.name ?? "[No name]")
+                            Text(optionalString: meme.destination?.name)
+                                .font(.caption)
+                        }
+                        
+                        if meme.uploaded {
+                            Spacer()
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
                     }
                 }
             }

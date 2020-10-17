@@ -59,6 +59,11 @@ struct AlbumsView: View {
                 memeController.assets = nil
             }
         }
+        .onDisappear {
+            if exclude {
+                memeController.saveToPersistentStore()
+            }
+        }
     }
 }
 

@@ -28,7 +28,7 @@ struct MemeView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .frame(width: proxy.size.width,
-                       height: min(proxy.size.width, abs(proxy.size.height - 52)))
+                       height: min(proxy.size.width, abs(proxy.size.height - 64)))
                 
                 if let meme = memeController.currentMeme {
                     MemeForm(meme: meme)
@@ -99,6 +99,9 @@ struct MemeForm: View {
     @ObservedObject var meme: Meme
     
     var body: some View {
+        ProgressView(value: providerController.uploadProgress[meme]
+                        ?? meme.uploaded.float)
+        
         HStack {
             TextField("Name", text: $meme.wrappedName, onCommit: {
                 meme.modified = Date()
@@ -109,7 +112,9 @@ struct MemeForm: View {
                 providerController.upload(meme, memeController: memeController, context: moc) { success in
                     if success {
                         DispatchQueue.main.async {
-                            memeController.nextMeme()
+                            withAnimation {
+                                memeController.nextMeme()
+                            }
                         }
                     }
                 }

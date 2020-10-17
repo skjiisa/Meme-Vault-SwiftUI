@@ -43,10 +43,8 @@ class MemeController: ObservableObject {
     func nextMeme() {
         guard let currentMeme = currentMeme,
               let index = memes.firstIndex(of: currentMeme),
-              index < memes.endIndex else { return }
-        withAnimation {
-            self.currentMeme = memes[index + 1]
-        }
+              index < memes.endIndex - 1 else { return }
+        self.currentMeme = memes[index + 1]
     }
     
     //MARK: Fetching Images

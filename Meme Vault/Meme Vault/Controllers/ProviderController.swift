@@ -11,6 +11,9 @@ import CoreData
 import FilesProvider
 
 class ProviderController: ObservableObject {
+    
+    //MARK: Properties
+    
     private(set) var webdavProvider: WebDAVFileProvider?
     
     private(set) var host: URL?
@@ -18,6 +21,9 @@ class ProviderController: ObservableObject {
     
     private var uploadQueue: [String: Meme] = [:]
     private var contentRequestIDs: [PHAsset: PHContentEditingInputRequestID] = [:]
+    
+    private var memes: [String: Meme] = [:]
+    @Published var uploadProgress: [Meme: Float] = [:]
     
     init() {
         host = UserDefaults.standard.url(forKey: "host")
@@ -121,7 +127,15 @@ class ProviderController: ObservableObject {
                 let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
                 try imageData.write(to: tempFile)
                 
+                self.memes[tempFile.path] = meme
+                
                 self.webdavProvider?.copyItem(localFile: tempFile, to: path, overwrite: true, completionHandler: { error in
+                    DispatchQueue.main.async {
+                        try? FileManager.default.removeItem(at: tempFile)
+                        self.memes.removeValue(forKey: tempFile.path)
+                        self.uploadProgress.removeValue(forKey: meme)
+                    }
+                    
                     if let error = error {
                         NSLog("\(error)")
                         return completion(false)
@@ -182,6 +196,14 @@ extension ProviderController: FileProviderDelegate {
             print("Downloading \(source) to \((dest as NSString).lastPathComponent): \(progress * 100) completed.")
         case .copy(source: let source, destination: let dest) where source.hasPrefix("file://"):
             print("Uploading \((source as NSString).lastPathComponent) to \(dest): \(progress * 100) completed.")
+            
+            // Log the progress
+            let tempFile = String(source.dropFirst(7))
+            if let meme = memes[tempFile] {
+                withAnimation {
+                    uploadProgress[meme] = progress
+                }
+            }
         case .copy(source: let source, destination: let dest):
             print("Copy \(source) to \(dest): \(progress * 100) completed.")
         default:

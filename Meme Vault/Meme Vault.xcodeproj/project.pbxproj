@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 591DC3C424CD19B800CDA06D /* Meme_Vault.xcdatamodeld */; };
 		59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59581A6524D3B931007E5284 /* DestinationDisclosure.swift */; };
+		599A9118253B597E007B674D /* Bool+Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599A9117253B597E007B674D /* Bool+Number.swift */; };
 		599E43A024D35C75001C8597 /* MemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E439F24D35C75001C8597 /* MemesView.swift */; };
 		599E43A224D35EAD001C8597 /* MemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43A124D35EAD001C8597 /* MemeController.swift */; };
 		599E43A524D36C06001C8597 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599E43A424D36C06001C8597 /* ProviderController.swift */; };
@@ -36,6 +37,7 @@
 /* Begin PBXFileReference section */
 		591DC3C524CD19B800CDA06D /* Meme_Vault.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Meme_Vault.xcdatamodel; sourceTree = "<group>"; };
 		59581A6524D3B931007E5284 /* DestinationDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDisclosure.swift; sourceTree = "<group>"; };
+		599A9117253B597E007B674D /* Bool+Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Number.swift"; sourceTree = "<group>"; };
 		599E439F24D35C75001C8597 /* MemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesView.swift; sourceTree = "<group>"; };
 		599E43A124D35EAD001C8597 /* MemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeController.swift; sourceTree = "<group>"; };
 		599E43A424D36C06001C8597 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				599E43AB24D37325001C8597 /* AlertRepresentation.swift */,
 				59E009E324D7DA04001F8A31 /* Image+Meme.swift */,
 				59B668B324DA34630055E71C /* Text+Optional.swift */,
+				599A9117253B597E007B674D /* Bool+Number.swift */,
 				59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */,
 			);
 			path = Helpers;
@@ -237,6 +240,7 @@
 			files = (
 				59A2683024C90D180056282C /* MemeView.swift in Sources */,
 				599E43B124D383E0001C8597 /* DestinationView.swift in Sources */,
+				599A9118253B597E007B674D /* Bool+Number.swift in Sources */,
 				59A2681F24C903ED0056282C /* ContentView.swift in Sources */,
 				599E43A524D36C06001C8597 /* ProviderController.swift in Sources */,
 				599E43AF24D379E8001C8597 /* DestinationsView.swift in Sources */,

@@ -80,6 +80,22 @@ class ProviderController: ObservableObject {
         return path + "/" + directory
     }
     
+    func ssl(_ url: String) -> String {
+        if url.hasPrefix("https://") {
+            return url
+        }
+        
+        if url.hasPrefix("http://") {
+            var newURL = url
+            if let index = newURL.firstIndex(of: ":") {
+                newURL.insert("s", at: index)
+                return newURL
+            }
+        }
+        
+        return "https://" + url
+    }
+    
     //MARK: Networking
     
     func upload(_ meme: Meme, memeController: MemeController) {

@@ -43,7 +43,7 @@ struct DestinationsView: View {
     
     var body: some View {
         List {
-            ForEach(destinations, id: \.self) { destination in
+            ForEach(destinations) { destination in
                 NavigationLink(destination: DestinationsView(parent: destination)) {
                         HStack {
                             VStack(alignment: .leading) {

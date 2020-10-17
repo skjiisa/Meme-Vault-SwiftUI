@@ -26,7 +26,7 @@ struct DestinationDisclosure: View {
     
     var body: some View {
         DisclosureGroup {
-            ForEach(children, id: \.self) { child in
+            ForEach(children) { child in
                 DestinationDisclosure(chosenDestination: $chosenDestination, destination: child)
             }
         } label: {

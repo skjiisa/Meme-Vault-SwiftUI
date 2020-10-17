@@ -28,6 +28,7 @@
 		59B668B424DA34630055E71C /* Text+Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B668B324DA34630055E71C /* Text+Optional.swift */; };
 		59C0AD9024CD250600979F59 /* Meme_Vault+Wrapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */; };
 		59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD9324CD424200979F59 /* SettingsView.swift */; };
+		59CC2FC6253A8A7200C25DC3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */; };
 		59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E009E324D7DA04001F8A31 /* Image+Meme.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		59B668B324DA34630055E71C /* Text+Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Optional.swift"; sourceTree = "<group>"; };
 		59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Wrapping.swift"; sourceTree = "<group>"; };
 		59C0AD9324CD424200979F59 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		59E009E324D7DA04001F8A31 /* Image+Meme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Meme.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +86,7 @@
 				599E43AB24D37325001C8597 /* AlertRepresentation.swift */,
 				59E009E324D7DA04001F8A31 /* Image+Meme.swift */,
 				59B668B324DA34630055E71C /* Text+Optional.swift */,
+				59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				599E43B524D3AEF1001C8597 /* FilesContainer.swift in Sources */,
 				599E43A024D35C75001C8597 /* MemesView.swift in Sources */,
 				59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */,
+				59CC2FC6253A8A7200C25DC3 /* Identifiable.swift in Sources */,
 				59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */,
 				591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */,
 				599E43AA24D36D07001C8597 /* LoginView.swift in Sources */,

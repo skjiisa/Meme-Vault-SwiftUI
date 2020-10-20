@@ -16,6 +16,8 @@ struct MemeView: View {
     @EnvironmentObject var memeController: MemeController
     @EnvironmentObject var providerController: ProviderController
     
+    @State private var maxHeight: CGFloat = 0
+    
     var body: some View {
         GeometryReader { proxy in
             VStack {
@@ -28,10 +30,30 @@ struct MemeView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .frame(width: proxy.size.width,
-                       height: min(proxy.size.width, abs(proxy.size.height - 64)))
+                       // Ideally make the image square.
+                       // If the keyboard is showing, make the image 64
+                       // pixels shorter than the frame to give space
+                       // for the text field.
+                       // Otherwise, make sure it doesn't take up more
+                       // than 2/3 of the screen height.
+                       height: min(proxy.size.width,
+                                   proxy.size.height < maxHeight
+                                    ? abs(proxy.size.height - 64)
+                                    : proxy.size.height * 2/3))
                 
                 if let meme = memeController.currentMeme {
                     MemeForm(meme: meme)
+                }
+            }
+            .onAppear {
+                maxHeight = proxy.size.height
+            }
+            // This could potentially be removed,
+            // assuming the view appears at its max height
+            // (i.e., without the keyboard showing).
+            .onChange(of: proxy.size.height) { height in
+                if height > maxHeight {
+                    maxHeight = height
                 }
             }
         }

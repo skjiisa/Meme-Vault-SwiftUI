@@ -46,13 +46,13 @@ struct LoginView: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                 
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $nextcloud) {
+                Toggle(isOn: $nextcloud) {
+                    VStack(alignment: .leading) {
                         Text("Nextcloud")
+                        Text("Automatically adds DAV extension to URL")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    Text("Automatically adds DAV extension to URL")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
             }
             

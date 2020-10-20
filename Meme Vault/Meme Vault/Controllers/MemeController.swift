@@ -112,20 +112,11 @@ class MemeController: ObservableObject {
     }
     
     func getNextAssetMemes(count: Int, context: NSManagedObjectContext) {
-        // Get valid assets
-        var assets: [PHAsset] = []
-        while let asset = nextValidAsset(),
-              assets.count <= count {
-            assets.append(asset)
-        }
-        
-        // Fetch existing Memes for the assets
-        let assetIDs = assets.map { $0.localIdentifier }
-        
+        // Fetch all existing Memes.
         let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id IN %@", assetIDs)
         let existingMemes = try? context.fetch(fetchRequest)
         
+        // Make a hash table for easy Meme lookup.
         var memesByID: [String: Meme] = [:]
         for meme in existingMemes ?? [] {
             guard let id = meme.id else { continue }
@@ -133,8 +124,11 @@ class MemeController: ObservableObject {
         }
         
         // Create if necessary and add each asset's Meme to the list
-        for asset in assets {
+        // if it hasn't already been uploaded.
+        while let asset = nextValidAsset(),
+              memes.count < count {
             if let meme = memesByID[asset.localIdentifier] {
+                guard !meme.uploaded else { continue }
                 memes.append(meme)
             } else {
                 let meme = Meme(id: asset.localIdentifier, context: context)

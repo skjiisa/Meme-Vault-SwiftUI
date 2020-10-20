@@ -39,7 +39,7 @@ struct MemeView: View {
                        height: min(proxy.size.width,
                                    proxy.size.height < maxHeight
                                     ? abs(proxy.size.height - 64)
-                                    : proxy.size.height * 2/3))
+                                    : proxy.size.height * 3/5))
                 
                 if let meme = memeController.currentMeme {
                     MemeForm(meme: meme)
@@ -120,6 +120,8 @@ struct MemeForm: View {
     
     @ObservedObject var meme: Meme
     
+    @State private var showingActions = false
+    
     var body: some View {
         ProgressView(value: providerController.uploadProgress[meme]
                         ?? meme.uploaded.float)
@@ -146,9 +148,46 @@ struct MemeForm: View {
             .disabled(meme.destination == nil)
         }
         
-        List {
-            ForEach(destinations) { destination in
-                DestinationDisclosure(chosenDestination: $meme.destination, destination: destination, meme: meme)
+        ScrollViewReader { proxy in
+            List {
+                Picker("Tab", selection: $showingActions) {
+                    Text("Destinations").tag(false)
+                    Text("Actions").tag(true)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .onChange(of: showingActions) { _ in
+                    withAnimation {
+                        proxy.scrollTo(1, anchor: .top)
+                    }
+                }
+                .onChange(of: meme.uploaded) { uploaded in
+                    if uploaded {
+                        withAnimation {
+                            showingActions = true
+                        }
+                    }
+                }
+                
+                if !showingActions {
+                    ForEach(destinations) { destination in
+                        DestinationDisclosure(chosenDestination: $meme.destination, destination: destination, meme: meme)
+                    }
+                    .id(1)
+                } else {
+                    Button("Share") {
+                        print("Share")
+                    }
+                    .id(1)
+                    Button("Delete") {
+                        print("Delete")
+                    }
+                    Button("Remove from album") {
+                        print("Remove from album")
+                    }
+                }
+            }
+            .onAppear {
+                proxy.scrollTo(1, anchor: .top)
             }
         }
     }

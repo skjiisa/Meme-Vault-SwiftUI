@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 591DC3C424CD19B800CDA06D /* Meme_Vault.xcdatamodeld */; };
+		5928D64F253FAFE70091C2B6 /* Set+Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5928D64E253FAFE70091C2B6 /* Set+Toggle.swift */; };
 		59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59581A6524D3B931007E5284 /* DestinationDisclosure.swift */; };
 		59838CD1253B884100E21D9A /* View+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59838CD0253B884100E21D9A /* View+Keyboard.swift */; };
 		599A9118253B597E007B674D /* Bool+Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599A9117253B597E007B674D /* Bool+Number.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		591DC3C524CD19B800CDA06D /* Meme_Vault.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Meme_Vault.xcdatamodel; sourceTree = "<group>"; };
+		5928D64E253FAFE70091C2B6 /* Set+Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+Toggle.swift"; sourceTree = "<group>"; };
 		59581A6524D3B931007E5284 /* DestinationDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDisclosure.swift; sourceTree = "<group>"; };
 		59838CD0253B884100E21D9A /* View+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Keyboard.swift"; sourceTree = "<group>"; };
 		599A9117253B597E007B674D /* Bool+Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Number.swift"; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				59E009E324D7DA04001F8A31 /* Image+Meme.swift */,
 				59B668B324DA34630055E71C /* Text+Optional.swift */,
 				599A9117253B597E007B674D /* Bool+Number.swift */,
+				5928D64E253FAFE70091C2B6 /* Set+Toggle.swift */,
 				59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */,
 			);
 			path = Helpers;
@@ -261,6 +264,7 @@
 				59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */,
 				591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */,
 				599E43AA24D36D07001C8597 /* LoginView.swift in Sources */,
+				5928D64F253FAFE70091C2B6 /* Set+Toggle.swift in Sources */,
 				59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */,
 				599E43A224D35EAD001C8597 /* MemeController.swift in Sources */,
 				59A2682E24C90B380056282C /* AlbumsView.swift in Sources */,

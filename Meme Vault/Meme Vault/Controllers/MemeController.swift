@@ -182,14 +182,9 @@ class MemeController: ObservableObject {
     
     //MARK: Albums
     
-    func toggle(_ album: PHAssetCollection) {
-        if excludedAlbums.contains(album) {
-            excludedAlbums.remove(album)
-        } else {
-            excludedAlbums.insert(album)
-        }
-    }
-    
+    /// Checks if an assets is in any of the excluded albums.
+    /// - Parameter asset: The assets to check.
+    /// - Returns: `True` if the assets is contained in any of the collections in `excludedAlbums`. Otherwise `False`.
     func excluded(_ asset: PHAsset) -> Bool {
         let collections = PHAssetCollection.fetchAssetCollectionsContaining(asset, with: .album, options: nil)
         for i in 0..<collections.count {

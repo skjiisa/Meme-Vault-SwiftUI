@@ -37,7 +37,7 @@ struct AlbumsView: View {
                 if exclude {
                     HStack {
                         Button(title) {
-                            memeController.toggle(albums.object(at: index))
+                            memeController.excludedAlbums.toggle(albums.object(at: index))
                         }
                         if memeController.excludedAlbums.contains(albums.object(at: index)) {
                             Spacer()

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 591DC3C424CD19B800CDA06D /* Meme_Vault.xcdatamodeld */; };
 		5928D64F253FAFE70091C2B6 /* Set+Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5928D64E253FAFE70091C2B6 /* Set+Toggle.swift */; };
+		5928D653253FB6A20091C2B6 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5928D652253FB6A20091C2B6 /* Action.swift */; };
 		59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59581A6524D3B931007E5284 /* DestinationDisclosure.swift */; };
 		59838CD1253B884100E21D9A /* View+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59838CD0253B884100E21D9A /* View+Keyboard.swift */; };
 		599A9118253B597E007B674D /* Bool+Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599A9117253B597E007B674D /* Bool+Number.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		591DC3C524CD19B800CDA06D /* Meme_Vault.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Meme_Vault.xcdatamodel; sourceTree = "<group>"; };
 		5928D64E253FAFE70091C2B6 /* Set+Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+Toggle.swift"; sourceTree = "<group>"; };
+		5928D652253FB6A20091C2B6 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		59581A6524D3B931007E5284 /* DestinationDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDisclosure.swift; sourceTree = "<group>"; };
 		59838CD0253B884100E21D9A /* View+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Keyboard.swift"; sourceTree = "<group>"; };
 		599A9117253B597E007B674D /* Bool+Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Number.swift"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */,
 				59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */,
 				599E43B424D3AEF0001C8597 /* FilesContainer.swift */,
+				5928D652253FB6A20091C2B6 /* Action.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 				59CC2FC6253A8A7200C25DC3 /* Identifiable.swift in Sources */,
 				59838CD1253B884100E21D9A /* View+Keyboard.swift in Sources */,
 				59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */,
+				5928D653253FB6A20091C2B6 /* Action.swift in Sources */,
 				591DC3C624CD19B800CDA06D /* Meme_Vault.xcdatamodeld in Sources */,
 				599E43AA24D36D07001C8597 /* LoginView.swift in Sources */,
 				5928D64F253FAFE70091C2B6 /* Set+Toggle.swift in Sources */,

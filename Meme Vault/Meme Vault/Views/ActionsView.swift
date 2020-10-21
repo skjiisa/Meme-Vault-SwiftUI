@@ -20,7 +20,23 @@ struct ActionsView: View {
         }, label: {
             Image(systemName: "plus")
                 .imageScale(.large)
+                .font(.body)
         })
+    }
+    
+    var actionButtons: [ActionSheet.Button] {
+        [Action.share, Action.delete, Action.removeFromAlbum(id: nil)].compactMap { action in
+            guard !actionSet.actions.contains(action) else { return nil }
+            return ActionSheet.Button.default(Text(actionController.title(for: action))) {
+                withAnimation {
+                    actionSet.add(action: action)
+                }
+            }
+        } + [
+            .default(Text("Remove from specific album...")),
+            .default(Text("Add to specific album...")),
+            .cancel()
+        ]
     }
     
     var body: some View {
@@ -30,7 +46,12 @@ struct ActionsView: View {
             }
         }
         .navigationTitle("Actions")
+        .navigationBarItems(trailing: addButton)
+        .actionSheet(isPresented: $showingAddAction) {
+            ActionSheet(title: Text("Add Action"), buttons: actionButtons)
+        }
     }
+    
 }
 
 struct ActionsView_Previews: PreviewProvider {
@@ -38,8 +59,8 @@ struct ActionsView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            ActionsView(actionSet: actionController.actionSets[0])
-                .environmentObject(actionController)
+            NavigationLink("", destination: ActionsView(actionSet: actionController.actionSets[0]), isActive: .constant(true))
         }
+        .environmentObject(actionController)
     }
 }

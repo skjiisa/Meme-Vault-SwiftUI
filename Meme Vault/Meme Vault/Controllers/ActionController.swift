@@ -34,7 +34,7 @@ class ActionController: ObservableObject {
             }
             fallthrough
         case .removeFromAlbum:
-            return "Remove from album"
+            return "Remove from current album"
         }
     }
     

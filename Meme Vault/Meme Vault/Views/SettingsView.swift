@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var actionController: ActionController
-    
     var body: some View {
         List {
             NavigationLink("WebDAV account", destination: LoginView())
             NavigationLink("Destinations", destination: DestinationsView())
             
             Section {
-                NavigationLink("Default actions", destination: ActionsView(actionSet: actionController.defaultActions))
+                NavigationLink("Actions", destination: ActionSetsView())
             }
             
             Section {
@@ -30,6 +28,8 @@ struct SettingsView: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        NavigationView {
+            SettingsView()
+        }
     }
 }

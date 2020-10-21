@@ -8,8 +8,14 @@
 import Photos
 
 class ActionController: ObservableObject {
-    @Published var defaultActions = ActionSet(actions: [.share, .removeFromAlbum(id: nil), .delete])
-    @Published var actionSets: [PHAssetCollection: ActionSet] = [:]
+    @Published var actionSets: [ActionSet] = [ActionSet(name: "Default actions", actions: [.share, .delete])]
+    @Published var defaultActionSets: [PHAssetCollection: ActionSet] = [:]
+    @Published var defaultActionSetIndex = 0
+    
+    var defaultActionSet: ActionSet? {
+        guard defaultActionSetIndex < actionSets.count else { return nil }
+        return actionSets[defaultActionSetIndex]
+    }
     
     func title(for action: Action) -> String {
         switch action {

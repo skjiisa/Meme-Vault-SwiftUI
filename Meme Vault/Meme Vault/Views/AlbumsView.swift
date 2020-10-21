@@ -9,8 +9,6 @@ import SwiftUI
 import Photos
 import CoreData
 
-extension UIImage: Identifiable {}
-
 struct AlbumsView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var memeController: MemeController
@@ -19,14 +17,26 @@ struct AlbumsView: View {
     @State private var currentCollection: Int?
     
     var exclude: Bool
+    var onSelect: ((PHAssetCollection) -> Void)?
     
-    init(exclude: Bool = false) {
+    init() {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: options)
         _albums = .init(initialValue: albums)
         
+        exclude = false
+        onSelect = nil
+    }
+    
+    init(exclude: Bool) {
+        self.init()
         self.exclude = exclude
+    }
+    
+    init(onSelect: @escaping (PHAssetCollection) -> Void) {
+        self.init()
+        self.onSelect = onSelect
     }
     
     var body: some View {
@@ -34,12 +44,17 @@ struct AlbumsView: View {
             ForEach(0..<albums.count) { index in
                 let title = albums.object(at: index).localizedTitle ?? "Unknown Album"
                 
-                if exclude {
+                if exclude || onSelect != nil {
                     HStack {
                         Button(title) {
-                            memeController.excludedAlbums.toggle(albums.object(at: index))
+                            if exclude {
+                                memeController.excludedAlbums.toggle(albums.object(at: index))
+                            } else if let select = onSelect {
+                                select(albums.object(at: index))
+                            }
                         }
-                        if memeController.excludedAlbums.contains(albums.object(at: index)) {
+                        if exclude,
+                           memeController.excludedAlbums.contains(albums.object(at: index)) {
                             Spacer()
                             Image(systemName: "checkmark")
                                 .foregroundColor(.accentColor)
@@ -69,6 +84,9 @@ struct AlbumsView: View {
 
 struct AlbumsView_Previews: PreviewProvider {
     static var previews: some View {
-        AlbumsView()
+        NavigationView {
+            AlbumsView()
+                .environmentObject(MemeController())
+        }
     }
 }

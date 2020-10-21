@@ -13,15 +13,17 @@ struct ActionsView: View {
     @ObservedObject var actionSet: ActionSet
     
     @State private var showingAddAction = false
+    @State private var showingAlbumPicker = false
+    @State private var addToAlbum = false
     
     var addButton: some View {
-        Button(action: {
+        Button {
             showingAddAction = true
-        }, label: {
+        } label: {
             Image(systemName: "plus")
                 .imageScale(.large)
                 .font(.body)
-        })
+        }
     }
     
     var actionButtons: [ActionSheet.Button] {
@@ -33,8 +35,14 @@ struct ActionsView: View {
                 }
             }
         } + [
-            .default(Text("Remove from specific album...")),
-            .default(Text("Add to specific album...")),
+            .default(Text("Remove from album...")) {
+                addToAlbum = false
+                showingAlbumPicker = true
+            },
+            .default(Text("Add to album...")) {
+                addToAlbum = true
+                showingAlbumPicker = true
+            },
             .cancel()
         ]
     }
@@ -49,6 +57,20 @@ struct ActionsView: View {
         .navigationBarItems(trailing: addButton)
         .actionSheet(isPresented: $showingAddAction) {
             ActionSheet(title: Text("Add Action"), buttons: actionButtons)
+        }
+        .sheet(isPresented: $showingAlbumPicker) {
+            NavigationView {
+                AlbumsView() { assetCollection in
+                    showingAlbumPicker = false
+                    withAnimation {
+                        if addToAlbum {
+                            actionSet.add(action: .addToAlbum(id: assetCollection.localIdentifier))
+                        } else {
+                            actionSet.add(action: .removeFromAlbum(id: assetCollection.localIdentifier))
+                        }
+                    }
+                }
+            }
         }
     }
     

@@ -5,6 +5,7 @@
 //  Created by Isaac Lyons on 10/20/20.
 //
 
+import SwiftUI
 import Photos
 
 class ActionController: ObservableObject {
@@ -12,9 +13,26 @@ class ActionController: ObservableObject {
     @Published var defaultActionSets: [PHAssetCollection: ActionSet] = [:]
     @Published var defaultActionSetIndex = 0
     
+    @Published var albums: [PHAssetCollection] = []
+    @Published var currentAlbum: PHAssetCollection?
+    
+    init() {
+        refreshAlbums()
+    }
+    
     var defaultActionSet: ActionSet? {
         guard defaultActionSetIndex < actionSets.count else { return nil }
         return actionSets[defaultActionSetIndex]
+    }
+    
+    func refreshAlbums() {
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: options)
+        
+        withAnimation {
+            self.albums = albums.objects(at: IndexSet(0..<albums.count))
+        }
     }
     
     func title(for action: Action) -> String {

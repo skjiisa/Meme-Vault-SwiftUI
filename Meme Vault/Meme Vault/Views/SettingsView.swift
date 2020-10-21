@@ -14,6 +14,10 @@ struct SettingsView: View {
             NavigationLink("Destinations", destination: DestinationsView())
             
             Section {
+                NavigationLink("Default actions", destination: ActionsView())
+            }
+            
+            Section {
                 NavigationLink("Excluded albums", destination: AlbumsView(exclude: true))
             }
         }

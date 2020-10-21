@@ -10,9 +10,11 @@ import SwiftUI
 struct ActionsView: View {
     @EnvironmentObject var actionController: ActionController
     
+    @ObservedObject var actionSet: ActionSet
+    
     var body: some View {
         List {
-            ForEach(actionController.defaultActions, id: \.self) { action in
+            ForEach(actionSet.actions, id: \.self) { action in
                 Text(actionController.title(for: action))
             }
         }
@@ -21,7 +23,12 @@ struct ActionsView: View {
 }
 
 struct ActionsView_Previews: PreviewProvider {
+    static let actionController = ActionController()
+    
     static var previews: some View {
-        ActionsView()
+        NavigationView {
+            ActionsView(actionSet: actionController.defaultActions)
+                .environmentObject(actionController)
+        }
     }
 }

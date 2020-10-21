@@ -8,8 +8,8 @@
 import Photos
 
 class ActionController: ObservableObject {
-    @Published var defaultActions: [Action] = [.share, .removeFromAlbum(id: nil), .delete]
-    @Published var actionSets: [PHAssetCollection: [Action]] = [:]
+    @Published var defaultActions = ActionSet(actions: [.share, .removeFromAlbum(id: nil), .delete])
+    @Published var actionSets: [PHAssetCollection: ActionSet] = [:]
     
     func title(for action: Action) -> String {
         switch action {

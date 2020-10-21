@@ -10,7 +10,7 @@ import Foundation
 enum Action: Hashable {
     case share
     case delete
-    case addToAlbum(id: String?)
+    case addToAlbum(id: String)
     case removeFromAlbum(id: String?)
 }
 
@@ -18,7 +18,7 @@ extension Action: CaseIterable {
     static var allCases: [Action] {[
         share,
         delete,
-        addToAlbum(id: nil),
+        addToAlbum(id: ""),
         removeFromAlbum(id: nil)
     ]}
 }
@@ -43,11 +43,11 @@ extension Action: Codable {
         case .delete:
             self = .delete
         case .addToAlbum:
-            let id = try container.decode(String?.self, forKey: .id)
+            let id = try container.decode(String.self, forKey: .id)
             self = .addToAlbum(id: id)
         case .removeFromAlbum:
             let id = try container.decode(String?.self, forKey: .id)
-            self = .addToAlbum(id: id)
+            self = .removeFromAlbum(id: id)
         }
     }
     

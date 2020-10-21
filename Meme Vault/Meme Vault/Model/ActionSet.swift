@@ -27,7 +27,7 @@ class ActionSet: ObservableObject, Identifiable {
     /// For example, there can be multiple `addToAlbum` actions
     /// if they are referencing different albums.
     func add(action: Action) {
-        guard actions.contains(action) else { return }
+        guard !actions.contains(action) else { return }
         actions.append(action)
     }
 }

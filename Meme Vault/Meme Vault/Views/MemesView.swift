@@ -13,7 +13,7 @@ struct MemesView: View {
     @FetchRequest(
         entity: Meme.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)],
-        predicate: NSPredicate(format: "name != nil OR destination != nil"))
+        predicate: NSPredicate(format: "name != nil OR destination != nil OR uploaded == TRUE OR delete == TRUE"))
     var memes: FetchedResults<Meme>
     
     @State var selectedMeme: Meme?
@@ -29,6 +29,7 @@ struct MemesView: View {
                                 .scaledToFit()
                                 .frame(width: 64,
                                        height: 64 * min(1, image.size.height / image.size.width))
+                                .opacity(meme.delete ? 0.5 : 1.0)
                         }
                         
                         VStack(alignment: .leading) {
@@ -36,11 +37,17 @@ struct MemesView: View {
                             Text(optionalString: meme.destination?.name)
                                 .font(.caption)
                         }
+                        .foregroundColor(meme.delete ? .secondary : .primary)
                         
-                        if meme.uploaded {
+                        if meme.uploaded || meme.delete {
                             Spacer()
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.accentColor)
+                            if meme.delete {
+                                Image(systemName: "trash")
+                            }
+                            if meme.uploaded {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.accentColor)
+                            }
                         }
                     }
                 }

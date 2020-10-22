@@ -124,11 +124,12 @@ class MemeController: ObservableObject {
         }
         
         // Create if necessary and add each asset's Meme to the list
-        // if it hasn't already been uploaded.
+        // if it hasn't already been uploaded or marked for delete.
         while let asset = nextValidAsset(),
               memes.count < count {
             if let meme = memesByID[asset.localIdentifier] {
-                guard !meme.uploaded else { continue }
+                guard !meme.uploaded,
+                      !meme.delete else { continue }
                 memes.append(meme)
             } else {
                 let meme = Meme(id: asset.localIdentifier, context: context)
@@ -180,7 +181,7 @@ class MemeController: ObservableObject {
         fetchImageData(for: asset, completion: completion)
     }
     
-    //MARK: Sharing
+    //MARK: Actions
     
     func share(meme: Meme, shareSheet: @escaping (ShareSheet?) -> Void) {
         guard let asset = fetchAsset(for: meme) else { return shareSheet(nil) }
@@ -208,6 +209,11 @@ class MemeController: ObservableObject {
                 shareSheet(nil)
             }
         }
+    }
+    
+    func markForDelete(meme: Meme, context: NSManagedObjectContext) {
+        meme.delete.toggle()
+        try? context.save()
     }
     
     //MARK: Albums

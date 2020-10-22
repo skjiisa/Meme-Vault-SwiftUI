@@ -217,7 +217,7 @@ struct MemeForm: View {
                 showingShareSheet = shareSheet != nil
             }
         case .delete:
-            break
+            memeController.markForDelete(meme: meme, context: moc)
         default:
             actionController.perform(action: action, on: asset)
         }

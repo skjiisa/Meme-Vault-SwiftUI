@@ -52,6 +52,12 @@ class ActionController: ObservableObject {
         newActionSet = actionSet
     }
     
+    func setDefault(_ actionSet: ActionSet) {
+        guard let index = actionSets.firstIndex(of: actionSet) else { return }
+        defaultActionSetIndex = index
+        saveDefaultActionSetIndex()
+    }
+    
     /// The URL of the JSON file containing the list of `ActionSet`s.
     private var actionSetsFileURL: URL? {
         guard let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }

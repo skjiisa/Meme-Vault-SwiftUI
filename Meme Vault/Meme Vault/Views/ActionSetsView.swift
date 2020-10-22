@@ -33,7 +33,16 @@ struct ActionSetsView: View {
     var body: some View {
         List {
             ForEach(actionController.actionSets) { actionSet in
-                NavigationLink(actionSet.name, destination: ActionsView(actionSet: actionSet))
+                NavigationLink(destination: ActionsView(actionSet: actionSet)) {
+                    HStack {
+                        Text(actionSet.name)
+                        Spacer()
+                        if actionController.defaultActionSet == actionSet {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                        }
+                    }
+                }
             }
             .onDelete { indexSet in
                 actionController.removeActionSets(atOffsets: indexSet)

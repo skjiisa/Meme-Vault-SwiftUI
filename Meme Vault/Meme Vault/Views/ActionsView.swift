@@ -48,6 +48,20 @@ struct ActionsView: View {
     
     var body: some View {
         Form {
+            if actionController.defaultActionSet != self.actionSet {
+                Button() {
+                    withAnimation {
+                        actionController.setDefault(actionSet)
+                    }
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("Make default")
+                        Spacer()
+                    }
+                }
+            }
+            
             Section(header: Text("Name")) {
                 TextField("Action Set Name", text: $actionSet.name, onCommit:  {
                     actionController.saveActionSets()
@@ -69,18 +83,20 @@ struct ActionsView: View {
             }
             
             Section {
-                HStack {
-                    Spacer()
-                    Button("Add Action") {
-                        showingAddAction = true
+                Button() {
+                    showingAddAction = true
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("Add Action")
+                        Spacer()
                     }
-                    .foregroundColor(.accentColor)
-                    // I wish I didn't have to disable the button in edit
-                    // mode, but it doesn't work in edit mode anyway, so
-                    // this is to make the UI more clear.
-                    .disabled(editMode?.wrappedValue.isEditing ?? false)
-                    Spacer()
                 }
+                .foregroundColor(.accentColor)
+                // I wish I didn't have to disable the button in edit
+                // mode, but it doesn't work in edit mode anyway, so
+                // this is to make the UI more clear.
+                .disabled(editMode?.wrappedValue.isEditing ?? false)
             }
         }
         .navigationTitle("Actions")

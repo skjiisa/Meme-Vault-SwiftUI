@@ -58,19 +58,30 @@ class ActionController: ObservableObject {
         return documents.appendingPathComponent("actionSets.plist")
     }
     
-    /// Saves the list of `ActionSet`s to the file at `actionSetsFileURL`.
+    private var defaultActionSetIndexKey = "defaultActionSetIndex"
+    
+    /// Saves the index of the default Action Set to User Defaults
+    func saveDefaultActionSetIndex() {
+        UserDefaults.standard.setValue(defaultActionSetIndex, forKey: defaultActionSetIndexKey)
+    }
+    
+    /// Saves the list of Action Sets to the file at `actionSetsFileURL`.
+    /// Saves the default Action Set by calling `saveDefaultActionSetIndex`.
     func saveActionSets() {
         guard let url = actionSetsFileURL else { return }
         
         do {
             let excludedAlbumsData = try JSONEncoder().encode(actionSets)
             try excludedAlbumsData.write(to: url)
+            
+            saveDefaultActionSetIndex()
         } catch {
             NSLog("Error writing Action Sets data: \(error)")
         }
     }
     
-    /// Loads the list of `ActionSet`s from the plist file at `actionSetsFileURL`.
+    /// Loads the list of Action Sets from the plist file at `actionSetsFileURL`.
+    /// Loads the default Action Set from User Defaults.
     func loadActionSets() {
         guard let url = actionSetsFileURL,
               FileManager.default.fileExists(atPath: url.path) else { return }
@@ -78,6 +89,8 @@ class ActionController: ObservableObject {
         do {
             let excludedAlbumsData = try Data(contentsOf: url)
             actionSets = try JSONDecoder().decode([ActionSet].self, from: excludedAlbumsData)
+            
+            defaultActionSetIndex = UserDefaults.standard.integer(forKey: defaultActionSetIndexKey)
         } catch {
             NSLog("Error loading Action Sets data: \(error)")
         }

@@ -12,7 +12,7 @@ class ActionController: ObservableObject {
     
     //MARK: Properties
     
-    @Published var actionSets: [ActionSet] = [ActionSet(name: "Default actions", actions: [.share, .delete])]
+    @Published var actionSets: [ActionSet] = []
     @Published var defaultActionSets: [PHAssetCollection: ActionSet] = [:]
     @Published var defaultActionSetIndex = 0
     
@@ -23,6 +23,12 @@ class ActionController: ObservableObject {
     @Published var newActionSet: ActionSet?
     
     init() {
+        loadFromPersistentStore()
+        if actionSets.count == 0 {
+            actionSets.append(ActionSet(name: "Default actions", actions: [.share, .delete]))
+            saveToPersistentStore()
+        }
+        
         refreshAlbums()
     }
     
@@ -44,6 +50,37 @@ class ActionController: ObservableObject {
         let actionSet = ActionSet(name: "")
         actionSets.append(actionSet)
         newActionSet = actionSet
+    }
+    
+    /// The URL of the JSON file containing the list of `ActionSet`s.
+    private var persistentFileURL: URL? {
+        guard let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+        return documents.appendingPathComponent("actionSets.plist")
+    }
+    
+    /// Saves the list of `ActionSet`s to the file at `persistentFileURL`.
+    func saveToPersistentStore() {
+        guard let url = persistentFileURL else { return }
+        
+        do {
+            let excludedAlbumsData = try JSONEncoder().encode(actionSets)
+            try excludedAlbumsData.write(to: url)
+        } catch {
+            NSLog("Error writing Action Sets data: \(error)")
+        }
+    }
+    
+    /// Loads the list of `ActionSet`s from the plist file at `persistentFileURL`.
+    func loadFromPersistentStore() {
+        guard let url = persistentFileURL,
+              FileManager.default.fileExists(atPath: url.path) else { return }
+        
+        do {
+            let excludedAlbumsData = try Data(contentsOf: url)
+            actionSets = try JSONDecoder().decode([ActionSet].self, from: excludedAlbumsData)
+        } catch {
+            NSLog("Error loading Action Sets data: \(error)")
+        }
     }
     
     //MARK: Albums

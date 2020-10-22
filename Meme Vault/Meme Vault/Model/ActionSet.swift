@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ActionSet: NSObject, ObservableObject, Identifiable {
+class ActionSet: NSObject, ObservableObject, Identifiable, Codable {
     @Published var name: String
     @Published var actions: [Action]
     
@@ -29,5 +29,23 @@ class ActionSet: NSObject, ObservableObject, Identifiable {
     func add(action: Action) {
         guard !actions.contains(action) else { return }
         actions.append(action)
+    }
+    
+    //MARK: Codable
+    
+    enum CodingKeys: CodingKey {
+        case name, actions
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        actions = try container.decode([Action].self, forKey: .actions)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(actions, forKey: .actions)
     }
 }

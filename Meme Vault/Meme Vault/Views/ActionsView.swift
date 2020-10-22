@@ -25,6 +25,7 @@ struct ActionsView: View {
                 withAnimation {
                     actionSet.add(action: action)
                 }
+                actionController.saveToPersistentStore()
             }
         } + [
             .default(Text("Remove from album...")) {
@@ -48,7 +49,9 @@ struct ActionsView: View {
     var body: some View {
         Form {
             Section(header: Text("Name")) {
-                TextField("Action Set Name", text: $actionSet.name)
+                TextField("Action Set Name", text: $actionSet.name, onCommit:  {
+                    actionController.saveToPersistentStore()
+                })
             }
             
             Section(header: Text("Actions")) {
@@ -94,6 +97,7 @@ struct ActionsView: View {
                             actionSet.add(action: .removeFromAlbum(id: assetCollection.localIdentifier))
                         }
                     }
+                    actionController.saveToPersistentStore()
                 }
                 .environmentObject(actionController)
             }

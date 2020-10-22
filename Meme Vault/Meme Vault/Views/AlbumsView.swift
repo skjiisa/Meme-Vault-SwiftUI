@@ -74,7 +74,7 @@ struct AlbumsView: View {
         }
         .onDisappear {
             if exclude {
-                memeController.saveToPersistentStore()
+                memeController.saveExcludedAlbums()
             }
         }
     }

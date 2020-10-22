@@ -23,10 +23,10 @@ class ActionController: ObservableObject {
     @Published var newActionSet: ActionSet?
     
     init() {
-        loadFromPersistentStore()
+        loadActionSets()
         if actionSets.count == 0 {
             actionSets.append(ActionSet(name: "Default actions", actions: [.share, .delete]))
-            saveToPersistentStore()
+            saveActionSets()
         }
         
         refreshAlbums()
@@ -53,14 +53,14 @@ class ActionController: ObservableObject {
     }
     
     /// The URL of the JSON file containing the list of `ActionSet`s.
-    private var persistentFileURL: URL? {
+    private var actionSetsFileURL: URL? {
         guard let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
         return documents.appendingPathComponent("actionSets.plist")
     }
     
-    /// Saves the list of `ActionSet`s to the file at `persistentFileURL`.
-    func saveToPersistentStore() {
-        guard let url = persistentFileURL else { return }
+    /// Saves the list of `ActionSet`s to the file at `actionSetsFileURL`.
+    func saveActionSets() {
+        guard let url = actionSetsFileURL else { return }
         
         do {
             let excludedAlbumsData = try JSONEncoder().encode(actionSets)
@@ -70,9 +70,9 @@ class ActionController: ObservableObject {
         }
     }
     
-    /// Loads the list of `ActionSet`s from the plist file at `persistentFileURL`.
-    func loadFromPersistentStore() {
-        guard let url = persistentFileURL,
+    /// Loads the list of `ActionSet`s from the plist file at `actionSetsFileURL`.
+    func loadActionSets() {
+        guard let url = actionSetsFileURL,
               FileManager.default.fileExists(atPath: url.path) else { return }
         
         do {

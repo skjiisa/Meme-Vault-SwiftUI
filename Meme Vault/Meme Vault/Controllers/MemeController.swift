@@ -24,7 +24,7 @@ class MemeController: ObservableObject {
     private var fetchQueue = Set<Meme>()
     
     init() {
-        loadFromPersistentStore()
+        loadExcludedAlbums()
     }
     
     //MARK: Meme CRUD
@@ -232,45 +232,27 @@ class MemeController: ObservableObject {
         return false
     }
     
-    /// The URL of the plist file containing the list of excluded albums.
-    private var persistentFileURL: URL? {
-        guard let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-        return documents.appendingPathComponent("excludedAlbums.plist")
-    }
+    /// The User Defaults key for the String array of excluded albums
+    let excludedAlbumsKey = "excludedAlbums"
     
-    /// Saves the list of excluded albums to the plist file at `persistentFileURL`.
-    func saveToPersistentStore() {
-        guard let url = persistentFileURL else { return }
+    /// Saves the list of excluded albums to User Defaults.
+    func saveExcludedAlbums() {
         let albumIDs = excludedAlbums.map { $0.localIdentifier }
-        
-        do {
-            let excludedAlbumsData = try PropertyListEncoder().encode(albumIDs)
-            try excludedAlbumsData.write(to: url)
-        } catch {
-            NSLog("Error writing excluded albums data: \(error)")
-        }
+        UserDefaults.standard.setValue(albumIDs, forKey: excludedAlbumsKey)
     }
     
-    /// Loads the list of excluded albums from the plist file at `persistentFileURL`.
-    func loadFromPersistentStore() {
-        guard let url = persistentFileURL,
-              FileManager.default.fileExists(atPath: url.path) else { return }
+    /// Loads the list of excluded albums from the UserDefaults.
+    func loadExcludedAlbums() {
+        guard let albumIDsArray = UserDefaults.standard.stringArray(forKey: excludedAlbumsKey) else { return }
+        let albumIDs = Set(albumIDsArray)
         
-        do {
-            let excludedAlbumsData = try Data(contentsOf: url)
-            let albumIDsArray = try PropertyListDecoder().decode([String].self, from: excludedAlbumsData)
-            let albumIDs = Set(albumIDsArray)
-            
-            let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil)
-            
-            for i in 0..<albums.count {
-                let album = albums.object(at: i)
-                if albumIDs.contains(album.localIdentifier) {
-                    excludedAlbums.insert(album)
-                }
+        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil)
+        
+        for i in 0..<albums.count {
+            let album = albums.object(at: i)
+            if albumIDs.contains(album.localIdentifier) {
+                excludedAlbums.insert(album)
             }
-        } catch {
-            NSLog("Error loading excluded albums data: \(error)")
         }
     }
     

@@ -41,14 +41,20 @@ struct ActionsView: View {
     
     var body: some View {
         Form {
-            ForEach(actionSet.actions, id: \.self) { action in
-                Text(actionController.title(for: action))
+            Section(header: Text("Name")) {
+                TextField("Action Set Name", text: $actionSet.name)
             }
-            .onDelete { indexSet in
-                actionSet.actions.remove(atOffsets: indexSet)
-            }
-            .onMove { indices, newOffset in
-                actionSet.actions.move(fromOffsets: indices, toOffset: newOffset)
+            
+            Section(header: Text("Actions")) {
+                ForEach(actionSet.actions, id: \.self) { action in
+                    Text(actionController.title(for: action))
+                }
+                .onDelete { indexSet in
+                    actionSet.actions.remove(atOffsets: indexSet)
+                }
+                .onMove { indices, newOffset in
+                    actionSet.actions.move(fromOffsets: indices, toOffset: newOffset)
+                }
             }
             
             Section {

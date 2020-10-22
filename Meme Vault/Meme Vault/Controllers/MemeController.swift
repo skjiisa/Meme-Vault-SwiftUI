@@ -180,6 +180,36 @@ class MemeController: ObservableObject {
         fetchImageData(for: asset, completion: completion)
     }
     
+    //MARK: Sharing
+    
+    func share(meme: Meme, shareSheet: @escaping (ShareSheet?) -> Void) {
+        guard let asset = fetchAsset(for: meme) else { return shareSheet(nil) }
+        
+        fetchImageData(for: asset) { imageData, dataUTI in
+            guard let imageData = imageData,
+                  let dataUTI = dataUTI,
+                  let fileExtension = URL(string: dataUTI)?.pathExtension else { return shareSheet(nil) }
+            let name = meme.wrappedName.isEmpty ? dataUTI : meme.wrappedName
+            let filename = "\(name).\(fileExtension)"
+            
+            do {
+                let filePath = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+                try imageData.write(to: filePath)
+                shareSheet (
+                    ShareSheet(activityItems: [filePath]) { _, _, _, _ in
+                        do {
+                            try FileManager.default.removeItem(at: filePath)
+                        } catch {
+                            NSLog("Error deleting local copy of image: \(error)")
+                        }
+                    })
+            } catch {
+                NSLog("Error creating local copy of image: \(error)")
+                shareSheet(nil)
+            }
+        }
+    }
+    
     //MARK: Albums
     
     /// Checks if an assets is in any of the excluded albums.

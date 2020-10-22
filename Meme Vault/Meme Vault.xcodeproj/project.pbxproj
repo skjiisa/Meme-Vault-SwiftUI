@@ -39,6 +39,7 @@
 		59CC2FC9253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */; };
 		59D464DA2540CC8F00FB696C /* ActionSetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D464D92540CC8F00FB696C /* ActionSetsView.swift */; };
 		59E009E424D7DA04001F8A31 /* Image+Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E009E324D7DA04001F8A31 /* Image+Meme.swift */; };
+		59F20A042540E6FF0083483C /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20A032540E6FF0083483C /* ShareSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Convenience.swift"; sourceTree = "<group>"; };
 		59D464D92540CC8F00FB696C /* ActionSetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSetsView.swift; sourceTree = "<group>"; };
 		59E009E324D7DA04001F8A31 /* Image+Meme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Meme.swift"; sourceTree = "<group>"; };
+		59F20A032540E6FF0083483C /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				599E43B224D3A1C3001C8597 /* FileBrowserView.swift */,
 				59D464D92540CC8F00FB696C /* ActionSetsView.swift */,
 				5928D659253FC1C80091C2B6 /* ActionsView.swift */,
+				59F20A032540E6FF0083483C /* ShareSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				59A2683024C90D180056282C /* MemeView.swift in Sources */,
+				59F20A042540E6FF0083483C /* ShareSheet.swift in Sources */,
 				59D464DA2540CC8F00FB696C /* ActionSetsView.swift in Sources */,
 				599E43B124D383E0001C8597 /* DestinationView.swift in Sources */,
 				599A9118253B597E007B674D /* Bool+Number.swift in Sources */,

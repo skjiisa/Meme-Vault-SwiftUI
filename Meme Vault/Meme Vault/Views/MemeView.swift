@@ -128,6 +128,8 @@ struct MemeForm: View {
     @ObservedObject var meme: Meme
     
     @State private var showingActions = false
+    @State private var shareSheet: ShareSheet? = nil
+    @State private var showingShareSheet = false
     
     var body: some View {
         ProgressView(value: providerController.uploadProgress[meme]
@@ -195,13 +197,25 @@ struct MemeForm: View {
                 proxy.scrollTo(1, anchor: .top)
             }
         }
+        .sheet(isPresented: $showingShareSheet) {
+            shareSheet = nil
+        } content: {
+            if let shareSheet = shareSheet {
+                shareSheet
+            } else {
+                EmptyView()
+            }
+        }
     }
     
     func perform(action: Action) {
         guard let asset = memeController.fetchAsset(for: meme) else { return }
         switch action {
         case .share:
-            break
+            memeController.share(meme: meme) { shareSheet in
+                self.shareSheet = shareSheet
+                showingShareSheet = shareSheet != nil
+            }
         case .delete:
             break
         default:

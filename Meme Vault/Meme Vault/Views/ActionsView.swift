@@ -83,6 +83,7 @@ struct ActionsView: View {
                         }
                     }
                 }
+                .environmentObject(actionController)
             }
         }
     }

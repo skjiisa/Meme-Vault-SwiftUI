@@ -15,6 +15,7 @@ class ActionController: ObservableObject {
     
     @Published var albums: [PHAssetCollection] = []
     @Published var currentAlbum: PHAssetCollection?
+    var albumsByID: [String: PHAssetCollection] = [:]
     
     init() {
         refreshAlbums()
@@ -25,6 +26,10 @@ class ActionController: ObservableObject {
         return actionSets[defaultActionSetIndex]
     }
     
+    var defaultActions: [Action] {
+        defaultActionSet?.actions ?? []
+    }
+    
     func refreshAlbums() {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
@@ -33,6 +38,9 @@ class ActionController: ObservableObject {
         withAnimation {
             self.albums = albums.objects(at: IndexSet(0..<albums.count))
         }
+        
+        albumsByID.removeAll()
+        self.albums.forEach { albumsByID[$0.id] = $0 }
     }
     
     func title(for action: Action) -> String {
@@ -57,10 +65,31 @@ class ActionController: ObservableObject {
     }
     
     func albumName(id: String) -> String? {
-        let options = PHFetchOptions()
-        options.predicate = NSPredicate(format: "localIdentifier == %@", id)
-        options.fetchLimit = 1
-        let fetchResults = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: options)
-        return fetchResults.firstObject?.localizedTitle
+        if let album = albumsByID[id] {
+            return album.localizedTitle
+        }
+        
+        refreshAlbums()
+        return albumsByID[id]?.localizedTitle
     }
+    
+    func perform(action: Action, on asset: PHAsset) {
+        let assets = [asset] as NSFastEnumeration
+        
+        PHPhotoLibrary.shared().performChanges { [self] in
+            switch action {
+            case .addToAlbum(id: let id):
+                guard let album = albumsByID[id] else { break }
+                PHAssetCollectionChangeRequest(for: album)?.addAssets(assets)
+            case .removeFromAlbum(id: .some(let id)):
+                guard let album = albumsByID[id] else { break }
+                PHAssetCollectionChangeRequest(for: album)?.removeAssets(assets)
+            case .removeFromAlbum(id: nil):
+                guard let album = currentAlbum else { break }
+                PHAssetCollectionChangeRequest(for: album)?.removeAssets(assets)
+            default: break
+            }
+        }
+    }
+    
 }

@@ -8,6 +8,8 @@
 import SwiftUI
 import Photos
 
+//MARK: Meme View
+
 struct MemeView: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.presentationMode) var presentationMode
@@ -74,6 +76,8 @@ struct MemeView: View {
     }
 }
 
+//MARK: Image View
+
 struct ImageView: View {
     @Environment(\.managedObjectContext) var moc
     
@@ -108,6 +112,8 @@ struct ImageView: View {
     }
 }
 
+//MARK: Meme Form
+
 struct MemeForm: View {
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(
@@ -117,6 +123,7 @@ struct MemeForm: View {
     
     @EnvironmentObject var memeController: MemeController
     @EnvironmentObject var providerController: ProviderController
+    @EnvironmentObject var actionController: ActionController
     
     @ObservedObject var meme: Meme
     
@@ -174,21 +181,31 @@ struct MemeForm: View {
                     }
                     .id(1)
                 } else {
-                    Button("Share") {
-                        print("Share")
-                    }
-                    .id(1)
-                    Button("Delete") {
-                        print("Delete")
-                    }
-                    Button("Remove from album") {
-                        print("Remove from album")
+                    ForEach(actionController.defaultActions, id: \.self) { action in
+                        Button {
+                            perform(action: action)
+                        } label: {
+                            Text(actionController.title(for: action))
+                        }
+                        .foregroundColor(.accentColor)
                     }
                 }
             }
             .onAppear {
                 proxy.scrollTo(1, anchor: .top)
             }
+        }
+    }
+    
+    func perform(action: Action) {
+        guard let asset = memeController.fetchAsset(for: meme) else { return }
+        switch action {
+        case .share:
+            break
+        case .delete:
+            break
+        default:
+            actionController.perform(action: action, on: asset)
         }
     }
 }

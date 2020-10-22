@@ -138,6 +138,9 @@ struct MemeForm: View {
         HStack {
             TextField("Name", text: $meme.wrappedName, onCommit: {
                 meme.modified = Date()
+                if meme.name?.isEmpty ?? false {
+                    meme.name = nil
+                }
             })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.leading)
@@ -170,9 +173,11 @@ struct MemeForm: View {
                     }
                 }
                 .onChange(of: meme.uploaded) { uploaded in
-                    if uploaded {
-                        withAnimation {
+                    withAnimation {
+                        if uploaded {
                             showingActions = true
+                        } else {
+                            showingActions = false
                         }
                     }
                 }

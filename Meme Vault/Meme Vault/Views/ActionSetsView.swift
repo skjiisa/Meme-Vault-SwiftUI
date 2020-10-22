@@ -18,8 +18,16 @@ struct ActionSetsView: View {
         } label: {
             Image(systemName: "plus")
                 .imageScale(.large)
-                .font(.body)
         }
+    }
+    
+    var buttonStack: some View {
+        HStack {
+            EditButton()
+                .padding(.trailing)
+            addButton
+        }
+        .font(.body)
     }
     
     var body: some View {
@@ -27,9 +35,15 @@ struct ActionSetsView: View {
             ForEach(actionController.actionSets) { actionSet in
                 NavigationLink(actionSet.name, destination: ActionsView(actionSet: actionSet))
             }
+            .onDelete { indexSet in
+                actionController.actionSets.remove(atOffsets: indexSet)
+            }
+            .onMove { indices, newOffset in
+                actionController.actionSets.move(fromOffsets: indices, toOffset: newOffset)
+            }
         }
         .navigationTitle("Action Sets")
-        .navigationBarItems(trailing: addButton)
+        .navigationBarItems(trailing: buttonStack)
         .sheet(item: $actionController.newActionSet) {
             withAnimation {
                 actionController.actionSets.removeAll(where: { $0.name.isEmpty && $0.actions.count == 0 })

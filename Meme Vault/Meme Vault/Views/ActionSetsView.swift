@@ -36,10 +36,10 @@ struct ActionSetsView: View {
                 NavigationLink(actionSet.name, destination: ActionsView(actionSet: actionSet))
             }
             .onDelete { indexSet in
-                actionController.actionSets.remove(atOffsets: indexSet)
+                actionController.removeActionSets(atOffsets: indexSet)
             }
             .onMove { indices, newOffset in
-                actionController.actionSets.move(fromOffsets: indices, toOffset: newOffset)
+                actionController.moveActionSets(fromOffsets: indices, toOffset: newOffset)
             }
         }
         .navigationTitle("Action Sets")

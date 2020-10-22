@@ -83,6 +83,31 @@ class ActionController: ObservableObject {
         }
     }
     
+    private func findDefaultActionSet(_ actionSet: ActionSet?) {
+        if let actionSet = actionSet,
+           let defaultActionSetIndex = actionSets.firstIndex(of: actionSet) {
+            self.defaultActionSetIndex = defaultActionSetIndex
+        } else {
+            self.defaultActionSetIndex = 0
+        }
+    }
+    
+    func removeActionSets(atOffsets offsets: IndexSet) {
+        let defaultActionSet = self.defaultActionSet
+        actionSets.remove(atOffsets: offsets)
+        findDefaultActionSet(defaultActionSet)
+        
+        saveActionSets()
+    }
+    
+    func moveActionSets(fromOffsets source: IndexSet, toOffset destination: Int) {
+        let defaultActionSet = self.defaultActionSet
+        actionSets.move(fromOffsets: source, toOffset: destination)
+        findDefaultActionSet(defaultActionSet)
+        
+        saveActionSets()
+    }
+    
     //MARK: Albums
     
     func refreshAlbums() {

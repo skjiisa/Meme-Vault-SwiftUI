@@ -60,9 +60,11 @@ struct ActionsView: View {
                 }
                 .onDelete { indexSet in
                     actionSet.actions.remove(atOffsets: indexSet)
+                    actionController.saveActionSets()
                 }
                 .onMove { indices, newOffset in
                     actionSet.actions.move(fromOffsets: indices, toOffset: newOffset)
+                    actionController.saveActionSets()
                 }
             }
             

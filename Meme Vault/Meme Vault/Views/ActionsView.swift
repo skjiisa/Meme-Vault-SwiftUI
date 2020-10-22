@@ -39,6 +39,12 @@ struct ActionsView: View {
         ]
     }
     
+    var doneButton: some View {
+        Button("Done") {
+            actionController.newActionSet = nil
+        }
+    }
+    
     var body: some View {
         Form {
             Section(header: Text("Name")) {
@@ -73,7 +79,7 @@ struct ActionsView: View {
             }
         }
         .navigationTitle("Actions")
-        .navigationBarItems(trailing: EditButton())
+        .navigationBarItems(trailing: actionController.newActionSet == nil ? AnyView(EditButton()) : AnyView(doneButton))
         .actionSheet(isPresented: $showingAddAction) {
             ActionSheet(title: Text("Add Action"), buttons: actionButtons)
         }

@@ -9,6 +9,9 @@ import SwiftUI
 import Photos
 
 class ActionController: ObservableObject {
+    
+    //MARK: Properties
+    
     @Published var actionSets: [ActionSet] = [ActionSet(name: "Default actions", actions: [.share, .delete])]
     @Published var defaultActionSets: [PHAssetCollection: ActionSet] = [:]
     @Published var defaultActionSetIndex = 0
@@ -16,6 +19,8 @@ class ActionController: ObservableObject {
     @Published var albums: [PHAssetCollection] = []
     @Published var currentAlbum: PHAssetCollection?
     var albumsByID: [String: PHAssetCollection] = [:]
+    
+    @Published var newActionSet: ActionSet?
     
     init() {
         refreshAlbums()
@@ -30,6 +35,19 @@ class ActionController: ObservableObject {
         defaultActionSet?.actions ?? []
     }
     
+    //MARK: Action Sets
+    
+    /// Creates a new, empty `ActionSet`,
+    /// stores it in `newActionSet`,
+    /// and appends it to `actionSets`.
+    func createActionSet() {
+        let actionSet = ActionSet(name: "")
+        actionSets.append(actionSet)
+        newActionSet = actionSet
+    }
+    
+    //MARK: Albums
+    
     func refreshAlbums() {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
@@ -42,6 +60,17 @@ class ActionController: ObservableObject {
         albumsByID.removeAll()
         self.albums.forEach { albumsByID[$0.id] = $0 }
     }
+    
+    func albumName(id: String) -> String? {
+        if let album = albumsByID[id] {
+            return album.localizedTitle
+        }
+        
+        refreshAlbums()
+        return albumsByID[id]?.localizedTitle
+    }
+    
+    //MARK: Actions
     
     func title(for action: Action) -> String {
         switch action {
@@ -62,15 +91,6 @@ class ActionController: ObservableObject {
         case .removeFromAlbum:
             return "Remove from current album"
         }
-    }
-    
-    func albumName(id: String) -> String? {
-        if let album = albumsByID[id] {
-            return album.localizedTitle
-        }
-        
-        refreshAlbums()
-        return albumsByID[id]?.localizedTitle
     }
     
     func perform(action: Action, on asset: PHAsset) {

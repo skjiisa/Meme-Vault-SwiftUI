@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ActionSet: ObservableObject, Identifiable {
+class ActionSet: NSObject, ObservableObject, Identifiable {
     @Published var name: String
     @Published var actions: [Action]
     

@@ -19,7 +19,13 @@ struct ActionsView: View {
     @State private var addToAlbum = false
     
     var actionButtons: [ActionSheet.Button] {
-        [Action.share, Action.delete, Action.removeFromAlbum(id: nil)].compactMap { action in
+        [
+            Action.share,
+            Action.delete,
+            Action.favorite,
+            Action.unfavorite,
+            Action.removeFromAlbum(id: nil)
+        ].compactMap { action in
             guard !actionSet.actions.contains(action) else { return nil }
             return ActionSheet.Button.default(Text(actionController.title(for: action))) {
                 withAnimation {

@@ -10,6 +10,8 @@ import Foundation
 enum Action: Hashable {
     case share
     case delete
+    case favorite
+    case unfavorite
     case addToAlbum(id: String)
     case removeFromAlbum(id: String?)
 }
@@ -18,6 +20,8 @@ extension Action: CaseIterable {
     static var allCases: [Action] {[
         share,
         delete,
+        favorite,
+        unfavorite,
         addToAlbum(id: ""),
         removeFromAlbum(id: nil)
     ]}
@@ -30,7 +34,7 @@ extension Action: Codable {
     }
     
     private enum ActionKey: String, Codable {
-        case share, delete, addToAlbum, removeFromAlbum
+        case share, delete, favorite, unfavorite, addToAlbum, removeFromAlbum
     }
     
     init(from decoder: Decoder) throws {
@@ -42,6 +46,10 @@ extension Action: Codable {
             self = .share
         case .delete:
             self = .delete
+        case .favorite:
+            self = .favorite
+        case .unfavorite:
+            self = .unfavorite
         case .addToAlbum:
             let id = try container.decode(String.self, forKey: .id)
             self = .addToAlbum(id: id)
@@ -59,6 +67,10 @@ extension Action: Codable {
             try container.encode(ActionKey.share, forKey: .action)
         case .delete:
             try container.encode(ActionKey.delete, forKey: .action)
+        case .favorite:
+            try container.encode(ActionKey.favorite, forKey: .action)
+        case .unfavorite:
+            try container.encode(ActionKey.unfavorite, forKey: .action)
         case .addToAlbum(id: let id):
             try container.encode(ActionKey.addToAlbum, forKey: .action)
             try container.encode(id, forKey: .id)

@@ -159,6 +159,10 @@ class ActionController: ObservableObject {
             return "Share"
         case .delete:
             return "Delete"
+        case .favorite:
+            return "Add to favorites"
+        case .unfavorite:
+            return "Remove from favorites"
         case .addToAlbum(id: let id):
             if let name = albumName(id: id) {
                 return "Add to " + name
@@ -179,6 +183,10 @@ class ActionController: ObservableObject {
         
         PHPhotoLibrary.shared().performChanges { [self] in
             switch action {
+            case .favorite:
+                PHAssetChangeRequest(for: asset).isFavorite = true
+            case .unfavorite:
+                PHAssetChangeRequest(for: asset).isFavorite = false
             case .addToAlbum(id: let id):
                 guard let album = albumsByID[id] else { break }
                 PHAssetCollectionChangeRequest(for: album)?.addAssets(assets)

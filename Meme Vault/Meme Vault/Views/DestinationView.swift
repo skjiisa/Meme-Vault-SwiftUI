@@ -34,5 +34,10 @@ struct DestinationView: View {
         }
         .navigationTitle("Edit Destination")
         .navigationBarItems(trailing: doneButton)
+        .onChange(of: destination.wrappedPath) { path in
+            if destination.wrappedName.isEmpty {
+                destination.name = (path as NSString).lastPathComponent
+            }
+        }
     }
 }

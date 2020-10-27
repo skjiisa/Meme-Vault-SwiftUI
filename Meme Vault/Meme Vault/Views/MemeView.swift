@@ -188,13 +188,26 @@ struct MemeForm: View {
                     }
                     .id(1)
                 } else {
-                    ForEach(actionController.defaultActions, id: \.self) { action in
-                        Button {
-                            perform(action: action)
-                        } label: {
-                            Text(actionController.title(for: action))
+                    ForEach(actionController.actionSets) { actionSet in
+                        DisclosureGroup(actionSet.name, isExpanded: .init(get: {
+                            actionController.isAlbumActionSet(actionSet)
+                        }, set: { newValue in
+                            actionController.setAlbumActionSet(actionSet, isDefault: newValue)
+                        })) {
+                            ForEach(actionSet.actions, id: \.self) { action in
+                                Button {
+                                    perform(action: action)
+                                } label: {
+                                    Text(actionController.title(for: action))
+                                }
+                                .foregroundColor(.accentColor)
+                            }
                         }
-                        .foregroundColor(.accentColor)
+                    }
+                    .onChange(of: meme) { _ in
+                        withAnimation {
+                            actionController.tempActionSet = nil
+                        }
                     }
                 }
             }

@@ -15,6 +15,7 @@ class ActionController: ObservableObject {
     @Published var actionSets: [ActionSet] = []
     @Published var defaultActionSets: [PHAssetCollection: ActionSet] = [:]
     @Published var defaultActionSetIndex = 0
+    @Published var tempActionSetIndex: Int? = 0
     
     @Published var albums: [PHAssetCollection] = []
     @Published var currentAlbum: PHAssetCollection?
@@ -39,6 +40,26 @@ class ActionController: ObservableObject {
     
     var defaultActions: [Action] {
         defaultActionSet?.actions ?? []
+    }
+    
+    /// The temp Action Set to show expanded.
+    ///
+    /// Returns the Action Set in `actionSets` at the index of `tempActionSetIndex` if there is one.
+    /// If not, returns `defaultActionSet`.
+    var tempActionSet: ActionSet? {
+        get {
+            guard let tempActionSetIndex = tempActionSetIndex,
+                  tempActionSetIndex < actionSets.count else { return defaultActionSet }
+            return actionSets[tempActionSetIndex]
+        }
+        set {
+            if let newValue = newValue,
+               let index = actionSets.firstIndex(of: newValue) {
+                tempActionSetIndex = index
+            } else {
+                tempActionSetIndex = nil
+            }
+        }
     }
     
     //MARK: Action Sets
@@ -125,6 +146,39 @@ class ActionController: ObservableObject {
         findDefaultActionSet(defaultActionSet)
         
         saveActionSets()
+    }
+    
+    /// Checks if the given Action Set is the default for the current album.
+    /// - Parameter actionSet: The `ActionSet` to check
+    /// - Returns: `true` if the `ActionSet` in `defaultActionSets` for `currentAlbum` is the given Action Set.
+    /// `true` if there is no default Action Set for the current album but the given Action Set is the global default.
+    /// `true` if there is no current album but the Action Set is the temp Action Set.
+    func isAlbumActionSet(_ actionSet: ActionSet) -> Bool {
+        if let currentAlbum = currentAlbum {
+            if let albumDefault = defaultActionSets[currentAlbum] {
+                return albumDefault == actionSet
+            } else {
+                return defaultActionSet == actionSet
+            }
+        } else {
+            return tempActionSet == actionSet
+        }
+    }
+    
+    /// If there is a current album, set or unset the default Action Set for it. If not, set or unset the temp Action Set.
+    /// - Parameters:
+    ///   - actionSet: The `ActionSet` to set or unset
+    ///   - isDefault: Whether the Action Set should be set or unset
+    func setAlbumActionSet(_ actionSet: ActionSet, isDefault: Bool) {
+        if let currentAlbum = currentAlbum {
+            if isDefault {
+                defaultActionSets[currentAlbum] = actionSet
+            } else if defaultActionSets[currentAlbum] == actionSet {
+                defaultActionSets.removeValue(forKey: currentAlbum)
+            }
+        } else {
+            tempActionSet = actionSet
+        }
     }
     
     //MARK: Albums

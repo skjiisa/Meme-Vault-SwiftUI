@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct DestinationView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) var moc
+    
     @EnvironmentObject var providerController: ProviderController
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @ObservedObject var destination: Destination
     @State private var showingPaths = false
@@ -42,7 +44,14 @@ struct DestinationView: View {
     }
     
     func addAll(at path: String) {
-        let directories = providerController.directories[path]?.filter { $0.isDirectory }.map { $0.name }
-        print(directories)
+        guard let directories = providerController.directories[path],
+              let first = directories.first else { return }
+        
+        destination.path = first.path
+        destination.name = first.name
+        
+        directories.dropFirst().forEach { Destination(directory: $0, parent: destination.parent, context: moc) }
+        
+        presentationMode.wrappedValue.dismiss()
     }
 }

@@ -33,11 +33,7 @@ struct DestinationsView: View {
     
     var addDestinationButton: some View {
         Button() {
-            let destination = Destination(context: moc)
-            destination.path = parent?.path ?? "/"
-            destination.parent = parent
-            
-            newDestination = destination
+            newDestination = Destination(parent: parent, context: moc)
         } label: {
             Image(systemName: "plus")
                 .imageScale(.large)
@@ -78,6 +74,7 @@ struct DestinationsView: View {
         } content: { destination in
             NavigationView {
                 DestinationView(destination: destination)
+                    .environment(\.managedObjectContext, moc)
                     .environmentObject(providerController)
             }
         }

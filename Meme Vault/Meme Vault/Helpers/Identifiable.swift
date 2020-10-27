@@ -8,7 +8,11 @@
 import FilesProvider
 import Photos
 
-extension FileObject: Identifiable {}
+extension FileObject: Identifiable {
+    public var id: String {
+        path
+    }
+}
 
 extension PHAssetCollection: Identifiable {
     public var id: String {

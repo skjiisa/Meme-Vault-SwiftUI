@@ -25,6 +25,8 @@ class ProviderController: ObservableObject {
     private var memes: [String: Meme] = [:]
     @Published var uploadProgress: [Meme: Float] = [:]
     
+    @Published var directories: [String: [FileObject]] = [:]
+    
     init() {
         host = UserDefaults.standard.url(forKey: "host")
         loadCredentials()
@@ -153,6 +155,20 @@ class ProviderController: ObservableObject {
                 completion(false)
             }
         }
+    }
+    
+    func fetchContents(ofDirectoryAtPath path: String) {
+        webdavProvider?.contentsOfDirectory(path: path, completionHandler: { files, error in
+            if let error = error {
+                NSLog("\(error)")
+            }
+
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.directories[path] = files.filter { $0.isDirectory }
+                }
+            }
+        })
     }
     
 }

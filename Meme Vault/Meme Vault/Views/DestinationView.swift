@@ -27,7 +27,7 @@ struct DestinationView: View {
             }
             
             Section(header: Text("Path")) {
-                NavigationLink(destination: FileBrowserView(selectedPath: $destination.wrappedPath, showingPaths: $showingPaths, path: destination.path ?? "/").environmentObject(providerController), isActive: $showingPaths) {
+                NavigationLink(destination: FileBrowserView(selectedPath: $destination.wrappedPath, showingPaths: $showingPaths, path: destination.path ?? "/", addAll: addAll(at:)).environmentObject(providerController), isActive: $showingPaths) {
                     Text(destination.wrappedPath)
                 }
             }
@@ -39,5 +39,10 @@ struct DestinationView: View {
                 destination.name = (path as NSString).lastPathComponent
             }
         }
+    }
+    
+    func addAll(at path: String) {
+        let directories = providerController.directories[path]?.filter { $0.isDirectory }.map { $0.name }
+        print(directories)
     }
 }

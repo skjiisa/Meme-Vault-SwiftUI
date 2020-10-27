@@ -32,12 +32,16 @@ struct DestinationsView: View {
     }
     
     var addDestinationButton: some View {
-        Button("Add") {
+        Button() {
             let destination = Destination(context: moc)
             destination.path = parent?.path ?? "/"
             destination.parent = parent
             
             newDestination = destination
+        } label: {
+            Image(systemName: "plus")
+                .imageScale(.large)
+                .font(.body)
         }
     }
     

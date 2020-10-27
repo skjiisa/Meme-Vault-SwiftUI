@@ -11,12 +11,12 @@ import FilesProvider
 struct FileBrowserView: View {
     @EnvironmentObject var providerController: ProviderController
     
-    @ObservedObject var files = FilesContainer()
     @State private var fetchStarted = false
     @Binding var selectedPath: String
     @Binding var showingPaths: Bool
     
     let path: String
+    let addAll: (String) -> Void
     
     var chooseButton: some View {
         Button("Choose") {
@@ -26,12 +26,24 @@ struct FileBrowserView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(files.files) { file in
+        Form {
+            ForEach(providerController.directories[path] ?? []) { file in
                 NavigationLink(file.name, destination:
-                                FileBrowserView(selectedPath: $selectedPath, showingPaths: $showingPaths, path: providerController.append(fileNamed: file.name, to: path))
+                                FileBrowserView(selectedPath: $selectedPath, showingPaths: $showingPaths, path: providerController.append(fileNamed: file.name, to: path), addAll: addAll)
                                 .environmentObject(providerController)
                 )
+            }
+            
+            Section {
+                Button() {
+                    addAll(path)
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("Add All")
+                        Spacer()
+                    }
+                }
             }
         }
         .navigationTitle(path)
@@ -39,21 +51,13 @@ struct FileBrowserView: View {
         .onAppear {
             guard !fetchStarted else { return }
             fetchStarted = true
-            providerController.webdavProvider?.contentsOfDirectory(path: path, completionHandler: { files, error in
-                if let error = error {
-                    NSLog("\(error)")
-                }
-                
-                DispatchQueue.main.async {
-                    self.files.addFolders(files)
-                }
-            })
+            providerController.fetchContents(ofDirectoryAtPath: path)
         }
     }
 }
 
 struct FileBrowserView_Previews: PreviewProvider {
     static var previews: some View {
-        FileBrowserView(selectedPath: .constant("/"), showingPaths: .constant(true), path: "/")
+        FileBrowserView(selectedPath: .constant("/"), showingPaths: .constant(true), path: "/", addAll: {_ in})
     }
 }

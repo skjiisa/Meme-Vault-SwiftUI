@@ -23,7 +23,7 @@ struct MemeView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                TabView(selection: $memeController.currentMeme) {
+                TabView(selection: $memeController.currentMeme.animation()) {
                     ForEach(memeController.memes) { meme in
                         ImageView(meme: meme)
                             .padding(memeController.images[meme] == nil ? (proxy.size.width - 40) / 2 : 0)
@@ -146,15 +146,7 @@ struct MemeForm: View {
                 .padding(.leading)
             Button("Upload") {
                 dismissKeyboard()
-                providerController.upload(meme, memeController: memeController, context: moc) { success in
-                    if success {
-                        DispatchQueue.main.async {
-                            withAnimation {
-                                memeController.nextMeme()
-                            }
-                        }
-                    }
-                }
+                providerController.upload(meme, memeController: memeController, context: moc)
             }
             .padding(.trailing)
             .disabled(meme.destination == nil)

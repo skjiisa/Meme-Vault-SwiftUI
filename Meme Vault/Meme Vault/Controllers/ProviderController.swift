@@ -107,7 +107,7 @@ class ProviderController: ObservableObject {
     
     //MARK: Networking
     
-    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext, completion: @escaping (Bool) -> Void) {
+    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext, completion: @escaping (Bool) -> Void = {_ in}) {
         guard let destinationPath = meme.destination?.path else { return completion(false) }
         memeController.fetchImageData(for: meme) { imageData, dataUTI in
             guard let imageData = imageData,

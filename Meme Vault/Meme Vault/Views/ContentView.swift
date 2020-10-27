@@ -10,6 +10,7 @@ import Photos
 
 struct ContentView: View {
     @State var showingAlbums = false
+    @State var showingDeletedMemes = false
     
     let memeController = MemeController()
     let providerController = ProviderController()
@@ -31,7 +32,7 @@ struct ContentView: View {
             }
             
             NavigationView {
-                MemesView()
+                MemesView(showDeletedMemes: $showingDeletedMemes)
             }
             .tabItem {
                 Image(systemName: "photo.fill.on.rectangle.fill")

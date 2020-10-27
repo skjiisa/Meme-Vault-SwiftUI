@@ -41,18 +41,18 @@ struct LoginView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("WebDAV Server URL")) {
+            Section(header: Text("WebDAV Server URL"), footer: Text("Server must support SSL (HTTPS).")) {
                 TextField("https://nextcloud.example.com/", text: $url)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                 
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $nextcloud) {
+                Toggle(isOn: $nextcloud) {
+                    VStack(alignment: .leading) {
                         Text("Nextcloud")
+                        Text("Automatically adds DAV extension to URL")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    Text("Automatically adds DAV extension to URL")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
             }
             

@@ -10,9 +10,11 @@ import Photos
 
 struct ContentView: View {
     @State var showingAlbums = false
+    @State var showingDeletedMemes = false
     
     let memeController = MemeController()
     let providerController = ProviderController()
+    let actionController = ActionController()
     
     var body: some View {
         TabView {
@@ -30,7 +32,7 @@ struct ContentView: View {
             }
             
             NavigationView {
-                MemesView()
+                MemesView(showDeletedMemes: $showingDeletedMemes)
             }
             .tabItem {
                 Image(systemName: "photo.fill.on.rectangle.fill")
@@ -49,6 +51,7 @@ struct ContentView: View {
         }
         .environmentObject(memeController)
         .environmentObject(providerController)
+        .environmentObject(actionController)
         .onAppear {
             PHPhotoLibrary.requestAuthorization { status in
                 switch status {

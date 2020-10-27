@@ -10,48 +10,141 @@ import SwiftUI
 struct MemesView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var memeController: MemeController
-    @FetchRequest(
-        entity: Meme.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)])
-    var memes: FetchedResults<Meme>
+    @EnvironmentObject var actionController: ActionController
+    
+    var memesFetchRequest: FetchRequest<Meme>
+    var memes: FetchedResults<Meme> {
+        memesFetchRequest.wrappedValue
+    }
     
     @State var selectedMeme: Meme?
+    @State var showingTrash = false
+    var showingDeletedMemes: Binding<Bool>?
+    
+    init(showDeletedMemes: Binding<Bool>? = nil) {
+        let notEmpty = NSPredicate(format: "name != nil OR destination != nil OR uploaded == TRUE")
+        let inTrash = NSPredicate(format: "delete == TRUE")
+            
+        let predicate: NSPredicate
+        
+        if showDeletedMemes != nil {
+            /*
+            // For some reason, I cannot get this inTrash predicate to be inverted.
+            // None of the attempts in the `else` below work. I have no idea why,
+            // and it makes no sense. Simply checking if a boolean is false should
+            // be trivial, but I can't get it to work for the life of me.
+            // So the feature to exclude deleted Memes is being left out for now.
+        if let showDeletedMemes = showDeletedMemes {
+             
+            if showDeletedMemes.wrappedValue {
+                predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [notEmpty, inTrash])
+                predicate = inTrash
+            } else {
+                let notInTrash = NSCompoundPredicate(notPredicateWithSubpredicate: inTrash)
+                let notInTrash = NSPredicate(format: "%K == %d", #keyPath(Meme.delete), false)
+                predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [notEmpty, notInTrash])
+                predicate = notEmpty
+                predicate = notInTrash
+            }
+             */
+            predicate = notEmpty
+        } else {
+            predicate = inTrash
+        }
+        
+        memesFetchRequest = FetchRequest(
+            sortDescriptors: [NSSortDescriptor(keyPath: \Meme.modified, ascending: false)],
+            predicate: predicate)
+        
+        showingDeletedMemes = showDeletedMemes
+    }
+    
+    var trashButton: some View {
+        Button {
+            showingTrash = true
+        } label: {
+            Image(systemName: "trash")
+                .imageScale(.large)
+                .font(.body)
+        }
+    }
+    
+    var deleteAllButton: some View {
+        Button("Delete All") {
+            print("delete all")
+            let memes = self.memes.map { $0 }
+            let assets = memeController.fetchAssets(for: memes) as NSFastEnumeration
+            actionController.deleteAssets(assets) { success in
+                guard success else { return }
+                DispatchQueue.main.async {
+                    withAnimation {
+                        memeController.delete(memes, context: moc)
+                    }
+                }
+            }
+        }
+        .font(.body)
+    }
     
     var body: some View {
         List {
+            /* See init
+            if let showingDeletedMemes = showingDeletedMemes {
+                Toggle("Show deleted memes", isOn: showingDeletedMemes.animation())
+            }
+             */
+            
             ForEach(memes) { meme in
                 NavigationLink(destination: MemeView(), tag: meme, selection: $selectedMeme) {
-                    if let image = memeController.images[meme] {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 64,
-                                   height: 64 * min(1, image.size.height / image.size.width))
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text(meme.name ?? "[No name]")
-                        Text(optionalString: meme.destination?.name)
-                            .font(.caption)
-                    }
-                    
-                    if meme.uploaded {
-                        Spacer()
-                        Image(systemName: "checkmark")
-                            .foregroundColor(.accentColor)
+                    HStack {
+                        if let image = memeController.images[meme] {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 64,
+                                       height: 64 * min(1, image.size.height / image.size.width))
+                                .opacity(meme.delete ? 0.5 : 1.0)
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(meme.name ?? "[No name]")
+                            Text(optionalString: meme.destination?.name)
+                                .font(.caption)
+                        }
+                        .foregroundColor(meme.delete ? .secondary : .primary)
+                        
+                        if meme.uploaded || meme.delete {
+                            Spacer()
+                            if meme.delete {
+                                Image(systemName: "trash")
+                            }
+                            if meme.uploaded {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
                     }
                 }
             }
             .onDelete(perform: { indexSet in
                 guard let index = indexSet.first else { return }
-                memeController.delete(meme: memes[index], context: moc)
+                memeController.delete(memes[index], context: moc)
             })
         }
+        .listStyle(PlainListStyle())
         .navigationTitle("Memes")
+        .navigationBarItems(trailing: showingDeletedMemes == nil ? AnyView(deleteAllButton) : AnyView(trashButton))
         .onChange(of: selectedMeme) { meme in
             if let meme = meme {
                 memeController.load(memes)
                 memeController.currentMeme = meme
+            }
+        }
+        .sheet(isPresented: $showingTrash) {
+            NavigationView {
+                MemesView()
+                    .environment(\.managedObjectContext, moc)
+                    .environmentObject(memeController)
             }
         }
     }

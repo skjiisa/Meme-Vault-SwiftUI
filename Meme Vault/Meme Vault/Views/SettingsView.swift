@@ -10,8 +10,16 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         List {
-            NavigationLink("WebDAV Account", destination: LoginView())
+            NavigationLink("WebDAV account", destination: LoginView())
             NavigationLink("Destinations", destination: DestinationsView())
+            
+            Section {
+                NavigationLink("Actions", destination: ActionSetsView())
+            }
+            
+            Section {
+                NavigationLink("Excluded albums", destination: AlbumsView(exclude: true))
+            }
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle("Settings")
@@ -20,6 +28,8 @@ struct SettingsView: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        NavigationView {
+            SettingsView()
+        }
     }
 }

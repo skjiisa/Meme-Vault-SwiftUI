@@ -6,5 +6,12 @@
 //
 
 import FilesProvider
+import Photos
 
 extension FileObject: Identifiable {}
+
+extension PHAssetCollection: Identifiable {
+    public var id: String {
+        localIdentifier
+    }
+}

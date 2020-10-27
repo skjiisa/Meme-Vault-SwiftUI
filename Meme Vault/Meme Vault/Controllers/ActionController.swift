@@ -255,4 +255,16 @@ class ActionController: ObservableObject {
         }
     }
     
+    func deleteAssets(_ assets: NSFastEnumeration, completion: @escaping (Bool) -> Void) {
+        PHPhotoLibrary.shared().performChanges {
+            PHAssetChangeRequest.deleteAssets(assets)
+        } completionHandler: { success, error in
+            if let error = error {
+                NSLog("Error deleting assets: \(error)")
+            }
+            
+            completion(success)
+        }
+    }
+    
 }

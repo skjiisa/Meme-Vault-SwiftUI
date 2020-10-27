@@ -10,6 +10,7 @@ import SwiftUI
 struct MemesView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var memeController: MemeController
+    @EnvironmentObject var actionController: ActionController
     
     var memesFetchRequest: FetchRequest<Meme>
     var memes: FetchedResults<Meme> {
@@ -71,6 +72,16 @@ struct MemesView: View {
     var deleteAllButton: some View {
         Button("Delete All") {
             print("delete all")
+            let memes = self.memes.map { $0 }
+            let assets = memeController.fetchAssets(for: memes) as NSFastEnumeration
+            actionController.deleteAssets(assets) { success in
+                guard success else { return }
+                DispatchQueue.main.async {
+                    withAnimation {
+                        memeController.delete(memes, context: moc)
+                    }
+                }
+            }
         }
         .font(.body)
     }
@@ -117,7 +128,7 @@ struct MemesView: View {
             }
             .onDelete(perform: { indexSet in
                 guard let index = indexSet.first else { return }
-                memeController.delete(meme: memes[index], context: moc)
+                memeController.delete(memes[index], context: moc)
             })
         }
         .listStyle(PlainListStyle())

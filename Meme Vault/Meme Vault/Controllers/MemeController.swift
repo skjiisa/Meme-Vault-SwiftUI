@@ -29,8 +29,17 @@ class MemeController: ObservableObject {
     
     //MARK: Meme CRUD
     
-    func delete(meme: Meme, context: NSManagedObjectContext) {
+    func delete(_ meme: Meme, context: NSManagedObjectContext) {
         context.delete(meme)
+        do {
+            try context.save()
+        } catch {
+            NSLog("\(error)")
+        }
+    }
+    
+    func delete(_ memes: [Meme], context: NSManagedObjectContext) {
+        memes.forEach { context.delete($0) }
         do {
             try context.save()
         } catch {
@@ -146,6 +155,11 @@ class MemeController: ObservableObject {
         fetchOptions.fetchLimit = 1
         
         return PHAsset.fetchAssets(withLocalIdentifiers: [id], options: fetchOptions).firstObject
+    }
+    
+    func fetchAssets(for memes: [Meme]) -> PHFetchResult<PHAsset> {
+        let ids = memes.compactMap { $0.id }
+        return PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil)
     }
     
     func fetchImages(for album: PHAssetCollection, context: NSManagedObjectContext) {

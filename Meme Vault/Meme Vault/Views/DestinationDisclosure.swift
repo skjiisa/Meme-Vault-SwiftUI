@@ -25,17 +25,26 @@ struct DestinationDisclosure: View {
         self.fetchRequest = FetchRequest(entity: Destination.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "parent = %@", destination))
     }
     
+    var chooseButton: some View {
+        Button(destination.name ?? "Destination") {
+            chosenDestination = destination
+            meme?.modified = Date()
+        }
+        .foregroundColor(.accentColor)
+        .disabled(chosenDestination == destination)
+    }
+    
     var body: some View {
-        DisclosureGroup {
-            ForEach(children) { child in
-                DestinationDisclosure(chosenDestination: $chosenDestination, destination: child)
+        if children.count > 0 {
+            DisclosureGroup {
+                ForEach(children) { child in
+                    DestinationDisclosure(chosenDestination: $chosenDestination, destination: child)
+                }
+            } label: {
+                chooseButton
             }
-        } label: {
-            Button(destination.name ?? "Destination") {
-                chosenDestination = destination
-                meme?.modified = Date()
-            }
-            .disabled(chosenDestination == destination)
+        } else {
+            chooseButton
         }
     }
 }

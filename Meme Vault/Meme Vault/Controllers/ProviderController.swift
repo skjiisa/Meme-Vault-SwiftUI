@@ -25,6 +25,8 @@ class ProviderController: ObservableObject {
     private var memes: [String: Meme] = [:]
     @Published var uploadProgress: [Meme: Float] = [:]
     
+    @Published var directories: [String: [FileObject]] = [:]
+    
     init() {
         host = UserDefaults.standard.url(forKey: "host")
         loadCredentials()
@@ -105,7 +107,7 @@ class ProviderController: ObservableObject {
     
     //MARK: Networking
     
-    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext, completion: @escaping (Bool) -> Void) {
+    func upload(_ meme: Meme, memeController: MemeController, context: NSManagedObjectContext, completion: @escaping (Bool) -> Void = {_ in}) {
         guard let destinationPath = meme.destination?.path else { return completion(false) }
         memeController.fetchImageData(for: meme) { imageData, dataUTI in
             guard let imageData = imageData,
@@ -153,6 +155,20 @@ class ProviderController: ObservableObject {
                 completion(false)
             }
         }
+    }
+    
+    func fetchContents(ofDirectoryAtPath path: String) {
+        webdavProvider?.contentsOfDirectory(path: path, completionHandler: { files, error in
+            if let error = error {
+                NSLog("\(error)")
+            }
+
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.directories[path] = files.filter { $0.isDirectory }
+                }
+            }
+        })
     }
     
 }

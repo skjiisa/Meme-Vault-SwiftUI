@@ -13,6 +13,8 @@
 		5928D657253FC1510091C2B6 /* ActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5928D656253FC1510091C2B6 /* ActionController.swift */; };
 		5928D65A253FC1C80091C2B6 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5928D659253FC1C80091C2B6 /* ActionsView.swift */; };
 		5928D65D253FCA570091C2B6 /* ActionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5928D65C253FCA570091C2B6 /* ActionSet.swift */; };
+		5939154D254A1062001596D5 /* NCCommunication in Frameworks */ = {isa = PBXBuildFile; productRef = 5939154C254A1062001596D5 /* NCCommunication */; };
+		59391556254A2293001596D5 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 59391555254A2293001596D5 /* KeychainSwift */; };
 		59581A6624D3B931007E5284 /* DestinationDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59581A6524D3B931007E5284 /* DestinationDisclosure.swift */; };
 		59838CD1253B884100E21D9A /* View+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59838CD0253B884100E21D9A /* View+Keyboard.swift */; };
 		599A9118253B597E007B674D /* Bool+Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599A9117253B597E007B674D /* Bool+Number.swift */; };
@@ -82,6 +84,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59391556254A2293001596D5 /* KeychainSwift in Frameworks */,
+				5939154D254A1062001596D5 /* NCCommunication in Frameworks */,
 				599E43A824D36C65001C8597 /* FilesProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,6 +206,8 @@
 			name = "Meme Vault";
 			packageProductDependencies = (
 				599E43A724D36C65001C8597 /* FilesProvider */,
+				5939154C254A1062001596D5 /* NCCommunication */,
+				59391555254A2293001596D5 /* KeychainSwift */,
 			);
 			productName = "Meme Vault";
 			productReference = 59A2681924C903ED0056282C /* Meme Vault.app */;
@@ -232,6 +238,8 @@
 			mainGroup = 59A2681024C903ED0056282C;
 			packageReferences = (
 				599E43A624D36C65001C8597 /* XCRemoteSwiftPackageReference "FileProvider" */,
+				5939154B254A1062001596D5 /* XCRemoteSwiftPackageReference "ios-communication-library" */,
+				59391554254A2292001596D5 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 59A2681A24C903ED0056282C /* Products */;
 			projectDirPath = "";
@@ -478,6 +486,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5939154B254A1062001596D5 /* XCRemoteSwiftPackageReference "ios-communication-library" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nextcloud/ios-communication-library.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.80.0;
+			};
+		};
+		59391554254A2292001596D5 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 19.0.0;
+			};
+		};
 		599E43A624D36C65001C8597 /* XCRemoteSwiftPackageReference "FileProvider" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/amosavian/FileProvider.git";
@@ -489,6 +513,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5939154C254A1062001596D5 /* NCCommunication */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5939154B254A1062001596D5 /* XCRemoteSwiftPackageReference "ios-communication-library" */;
+			productName = NCCommunication;
+		};
+		59391555254A2293001596D5 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59391554254A2292001596D5 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
 		599E43A724D36C65001C8597 /* FilesProvider */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 599E43A624D36C65001C8597 /* XCRemoteSwiftPackageReference "FileProvider" */;

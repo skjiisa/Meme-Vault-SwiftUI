@@ -81,8 +81,8 @@ struct LoginView: View {
     }
     
     func login() {
-        /*
         loggingIn = true
+        /*
         var url = self.url
         if nextcloud {
             url = providerController.append(fileNamed: "remote.php/dav/files/\(username)/", to: url)
@@ -103,7 +103,16 @@ struct LoginView: View {
          */
         account.username = username
         account.baseURL = url
-        presentationMode.wrappedValue.dismiss()
+        nextcloudController.testLogin(account: account, password: password) { success, errorDescription in
+            if success {
+                DispatchQueue.main.async {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            } else {
+                alert = AlertRepresentation(title: "Login Failed", message: errorDescription)
+            }
+            loggingIn = false
+        }
     }
     
 }

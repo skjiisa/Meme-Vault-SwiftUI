@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WebDAV
 
 extension Meme {
     var wrappedName: String {
@@ -25,3 +26,5 @@ extension Destination {
         set { self.path = newValue }
     }
 }
+
+extension Account: WebDAVAccount {}

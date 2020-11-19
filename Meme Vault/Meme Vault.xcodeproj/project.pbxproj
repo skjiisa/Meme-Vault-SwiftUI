@@ -36,6 +36,7 @@
 		59C0AD9424CD424200979F59 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0AD9324CD424200979F59 /* SettingsView.swift */; };
 		59C952B525670E98002BA25C /* WebDAV in Frameworks */ = {isa = PBXBuildFile; productRef = 59C952B425670E98002BA25C /* WebDAV */; };
 		59C952B925671356002BA25C /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C952B825671356002BA25C /* AccountsView.swift */; };
+		59C952BD256715D4002BA25C /* TextWithCaption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C952BC256715D4002BA25C /* TextWithCaption.swift */; };
 		59CC2FC6253A8A7200C25DC3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */; };
 		59CC2FC9253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */; };
 		59D464DA2540CC8F00FB696C /* ActionSetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D464D92540CC8F00FB696C /* ActionSetsView.swift */; };
@@ -73,6 +74,7 @@
 		59C0AD8F24CD250600979F59 /* Meme_Vault+Wrapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Wrapping.swift"; sourceTree = "<group>"; };
 		59C0AD9324CD424200979F59 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		59C952B825671356002BA25C /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+		59C952BC256715D4002BA25C /* TextWithCaption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextWithCaption.swift; sourceTree = "<group>"; };
 		59CC2FC5253A8A7200C25DC3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		59CC2FC8253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meme_Vault+Convenience.swift"; sourceTree = "<group>"; };
 		59D464D92540CC8F00FB696C /* ActionSetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSetsView.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				59A2681C24C903ED0056282C /* Meme_VaultApp.swift */,
 				599E43A324D36BFB001C8597 /* Controllers */,
 				59C0AD9224CD423000979F59 /* Views */,
+				59C952BB256715C2002BA25C /* Supplemental Views */,
 				59C0AD9124CD422400979F59 /* Model */,
 				599E43AD24D3736A001C8597 /* Helpers */,
 				59A2682024C903EE0056282C /* Assets.xcassets */,
@@ -187,6 +190,14 @@
 				59C952B825671356002BA25C /* AccountsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		59C952BB256715C2002BA25C /* Supplemental Views */ = {
+			isa = PBXGroup;
+			children = (
+				59C952BC256715D4002BA25C /* TextWithCaption.swift */,
+			);
+			path = "Supplemental Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,6 +291,7 @@
 				599E43B324D3A1C3001C8597 /* FileBrowserView.swift in Sources */,
 				59CC2FC9253A8BBE00C25DC3 /* Meme_Vault+Convenience.swift in Sources */,
 				59B668B424DA34630055E71C /* Text+Optional.swift in Sources */,
+				59C952BD256715D4002BA25C /* TextWithCaption.swift in Sources */,
 				59C0AD9024CD250600979F59 /* Meme_Vault+Wrapping.swift in Sources */,
 				59A2681D24C903ED0056282C /* Meme_VaultApp.swift in Sources */,
 				5928D65A253FC1C80091C2B6 /* ActionsView.swift in Sources */,

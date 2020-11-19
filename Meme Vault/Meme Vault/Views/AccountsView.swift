@@ -23,13 +23,7 @@ struct AccountsView: View {
                 ForEach(accounts) { account in
                     NavigationLink(destination: LoginView(), tag: account, selection: $selectedAccount) {
                         VStack(alignment: .leading) {
-                            Text(account.username ?? "")
-                            if let baseURL = account.baseURL,
-                               !baseURL.isEmpty {
-                                Text(baseURL)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
+                            TextWithCaption(text: account.username ?? "", caption: account.baseURL)
                         }
                     }
                 }

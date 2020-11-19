@@ -9,6 +9,24 @@
           "revision": "abf68a62541a4193c8d106367ddb3648e8ab693f",
           "version": "0.26.0"
         }
+      },
+      {
+        "package": "SWXMLHash",
+        "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
+        "state": {
+          "branch": null,
+          "revision": "a4931e5c3bafbedeb1601d3bb76bbe835c6d475a",
+          "version": "5.0.1"
+        }
+      },
+      {
+        "package": "WebDAV",
+        "repositoryURL": "https://github.com/Isvvc/WebDAV-Swift.git",
+        "state": {
+          "branch": null,
+          "revision": "616477c242c0aaf0275fc208e6b9cee07bb4133b",
+          "version": "1.0.0"
+        }
       }
     ]
   },

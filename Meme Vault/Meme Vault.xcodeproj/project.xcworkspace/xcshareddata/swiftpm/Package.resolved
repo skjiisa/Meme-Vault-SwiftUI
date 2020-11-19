@@ -2,12 +2,57 @@
   "object": {
     "pins": [
       {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire",
+        "state": {
+          "branch": null,
+          "revision": "097e1f03166d49b31f824507fb85ad843b14fc13",
+          "version": "5.3.0"
+        }
+      },
+      {
         "package": "FilesProvider",
         "repositoryURL": "https://github.com/amosavian/FileProvider.git",
         "state": {
           "branch": null,
           "revision": "abf68a62541a4193c8d106367ddb3648e8ab693f",
           "version": "0.26.0"
+        }
+      },
+      {
+        "package": "NCCommunication",
+        "repositoryURL": "https://github.com/nextcloud/ios-communication-library.git",
+        "state": {
+          "branch": null,
+          "revision": "ffdfebc5ab4e3bce5a65ce48019c8b3fe96fb48f",
+          "version": "0.80.0"
+        }
+      },
+      {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+          "version": "19.0.0"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON",
+        "state": {
+          "branch": null,
+          "revision": "2b6054efa051565954e1d2b9da831680026cd768",
+          "version": "5.0.0"
+        }
+      },
+      {
+        "package": "SwiftyXMLParser",
+        "repositoryURL": "https://github.com/yahoojapan/SwiftyXMLParser",
+        "state": {
+          "branch": null,
+          "revision": "0ca0e992ce0135169c715a6580b99f3e99c503e7",
+          "version": "5.2.1"
         }
       }
     ]

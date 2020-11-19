@@ -15,6 +15,7 @@ struct ContentView: View {
     let memeController = MemeController()
     let providerController = ProviderController()
     let actionController = ActionController()
+    let nextcloudController = NextcloudController()
     
     var body: some View {
         TabView {
@@ -52,6 +53,7 @@ struct ContentView: View {
         .environmentObject(memeController)
         .environmentObject(providerController)
         .environmentObject(actionController)
+        .environmentObject(nextcloudController)
         .onAppear {
             PHPhotoLibrary.requestAuthorization { status in
                 switch status {

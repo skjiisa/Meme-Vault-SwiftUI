@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) var moc
+    
     @EnvironmentObject var providerController: ProviderController
+    @EnvironmentObject var nextcloudController: NextcloudController
     
     @State private var url: String = ""
     @State private var username: String = ""
@@ -18,25 +22,12 @@ struct LoginView: View {
     @State private var loggingIn = false
     @State private var alert: AlertRepresentation?
     
-    func login() {
-        loggingIn = true
-        var url = self.url
-        if nextcloud {
-            url = providerController.append(fileNamed: "remote.php/dav/files/\(username)/", to: url)
-        }
-        url = providerController.ssl(url)
-        providerController.login(host: url, username: username, password: password)
-        providerController.webdavProvider?.contentsOfDirectory(path: "/", completionHandler: { files, error in
-            loggingIn = false
-            if let error = error {
-                let message = "\(error)"
-                alert = AlertRepresentation(title: "Login Failed", message: message)
-                return
-            }
-            
-            alert = AlertRepresentation(title: "Login Successful")
-            print(files)
-        })
+    @ObservedObject var account: Account
+    
+    init(account: Account) {
+        _url = .init(wrappedValue: account.baseURL ?? "")
+        _username = .init(wrappedValue: account.username ?? "")
+        self.account = account
     }
     
     var body: some View {
@@ -80,13 +71,48 @@ struct LoginView: View {
         .alert(item: $alert) { alert in
             alert.alert
         }
-    }
-}
-
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            LoginView()
+        .onDisappear {
+            if !presentationMode.wrappedValue.isPresented,
+               username.isEmpty,
+               url.isEmpty {
+                nextcloudController.delete(account: account, context: moc)
+            }
         }
     }
+    
+    func login() {
+        loggingIn = true
+        /*
+        var url = self.url
+        if nextcloud {
+            url = providerController.append(fileNamed: "remote.php/dav/files/\(username)/", to: url)
+        }
+        url = providerController.ssl(url)
+        providerController.login(host: url, username: username, password: password)
+        providerController.webdavProvider?.contentsOfDirectory(path: "/", completionHandler: { files, error in
+            loggingIn = false
+            if let error = error {
+                let message = "\(error)"
+                alert = AlertRepresentation(title: "Login Failed", message: message)
+                return
+            }
+
+            alert = AlertRepresentation(title: "Login Successful")
+            print(files)
+        })
+         */
+        account.username = username
+        account.baseURL = url
+        nextcloudController.testLogin(account: account, password: password) { success, errorDescription in
+            if success {
+                DispatchQueue.main.async {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            } else {
+                alert = AlertRepresentation(title: "Login Failed", message: errorDescription)
+            }
+            loggingIn = false
+        }
+    }
+    
 }

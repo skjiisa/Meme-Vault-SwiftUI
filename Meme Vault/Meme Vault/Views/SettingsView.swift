@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         List {
-            NavigationLink("WebDAV account", destination: LoginView())
+            NavigationLink("Accounts", destination: AccountsView())
             NavigationLink("Destinations", destination: DestinationsView())
             
             Section {

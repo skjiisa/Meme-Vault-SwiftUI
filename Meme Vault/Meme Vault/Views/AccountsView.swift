@@ -21,11 +21,7 @@ struct AccountsView: View {
         Form {
             Section {
                 ForEach(accounts) { account in
-                    NavigationLink(destination: LoginView(), tag: account, selection: $selectedAccount) {
-                        VStack(alignment: .leading) {
-                            TextWithCaption(text: account.username ?? "", caption: account.baseURL)
-                        }
-                    }
+                    AccountCell(account: account)
                 }
                 .onDelete { indexSet in
                     providerController.delete(accounts: indexSet.map { accounts[$0] }, context: moc)
@@ -47,10 +43,20 @@ struct AccountsView: View {
         .navigationTitle("Accounts")
         .sheet(item: $newAccount) { newAccount in
             NavigationView {
-                LoginView()
+                LoginView(account: newAccount)
                     .environment(\.managedObjectContext, moc)
                     .environmentObject(providerController)
             }
+        }
+    }
+}
+
+fileprivate struct AccountCell: View {
+    @ObservedObject var account: Account
+    
+    var body: some View {
+        NavigationLink(destination: LoginView(account: account)) {
+            TextWithCaption(text: account.username ?? "", caption: account.baseURL)
         }
     }
 }

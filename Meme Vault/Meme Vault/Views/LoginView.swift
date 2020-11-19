@@ -68,7 +68,13 @@ struct LoginView: View {
         guard !loggingIn else { return }
         loggingIn = true
         account.username = username
-        account.baseURL = url
+        
+        if nextcloud {
+            account.baseURL = url
+            providerController.setNextcloudURL(account: account)
+        } else {
+            account.baseURL = providerController.https(url)
+        }
         
         // Test credentials by listing files in root directory
         providerController.webdav.listFiles(atPath: "/", account: account, password: password) { _, error in
@@ -80,7 +86,7 @@ struct LoginView: View {
             case .nsError(let nsError):
                 alert = .init(title: "Login failed", message: "\(nsError)")
             case .insufficientStorage, .none:
-                alert = .init(title: "Login successufl")
+                alert = .init(title: "Login successful")
                 // Save password
                 try? moc.save()
             }

@@ -24,7 +24,9 @@ struct AccountsView: View {
                     AccountCell(account: account)
                 }
                 .onDelete { indexSet in
-                    providerController.delete(accounts: indexSet.map { accounts[$0] }, context: moc)
+                    DispatchQueue.main.async {
+                        providerController.delete(accounts: indexSet.map { accounts[$0] }, context: moc)
+                    }
                 }
             }
 

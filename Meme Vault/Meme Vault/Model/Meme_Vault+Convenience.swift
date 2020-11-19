@@ -32,3 +32,10 @@ extension Destination {
         self.parent = parent
     }
 }
+
+extension Account {
+    var nextcloudExtension: String? {
+        guard let username = username else { return nil }
+        return "remote.php/dav/files/\(username)/"
+    }
+}

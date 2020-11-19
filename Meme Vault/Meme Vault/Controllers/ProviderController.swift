@@ -9,12 +9,14 @@ import SwiftUI
 import Photos
 import CoreData
 import FilesProvider
+import WebDAV
 
 class ProviderController: ObservableObject {
     
     //MARK: Properties
     
     private(set) var webdavProvider: WebDAVFileProvider?
+    let webdav = WebDAV()
     
     private(set) var host: URL?
     private(set) var credential: URLCredential?
@@ -99,19 +101,40 @@ class ProviderController: ObservableObject {
     
     //MARK: Pathing
     
-    func append(fileNamed directory: String, to path: String) -> String {
+    /// Appends a file or directory name to a path.
+    ///
+    /// Appropriately handles the `/` between the path and new file name,
+    /// so it doesn't matter whether or not the path ends with a `/`
+    /// or whether or not the file name starts with a `/`.
+    /// - Parameters:
+    ///   - fileName: The file name to append.
+    ///   - path: The path to append to.
+    /// - Returns: the path with the file name appended.
+    func append(fileNamed fileName: String, to path: String) -> String {
+        var path = path
         if path.last == "/" {
-            return path + directory
+            path.removeLast()
         }
         
-        return path + "/" + directory
+        if fileName.first == "/" {
+            return path + fileName
+        }
+        
+        return path + "/" + fileName
     }
-    
-    func ssl(_ url: String) -> String {
+
+    /// Sets a URL's protocol to HTTPS.
+    ///
+    /// If the URL is already using HTTPS, it returns the same URL.
+    /// If the URL is using HTTP, it converts it to HTTPS.
+    /// If the URL is using neither, it prefixes it with `https://`.
+    /// - Parameter url: A String of the URL to set the protocol of.
+    /// - Returns: the URL with an `https://` prefix.
+    func https(_ url: String) -> String {
         if url.hasPrefix("https://") {
             return url
         }
-        
+
         if url.hasPrefix("http://") {
             var newURL = url
             if let index = newURL.firstIndex(of: ":") {
@@ -119,8 +142,20 @@ class ProviderController: ObservableObject {
                 return newURL
             }
         }
-        
+
         return "https://" + url
+    }
+    
+    func setNextcloudURL(account: Account) {
+        guard var url = account.baseURL,
+              let nextcloudExtension = account.nextcloudExtension?.lowercased() else { return }
+        
+        url = https(url)
+        url = append(fileNamed: "/", to: url).lowercased()
+        
+        if !url.hasSuffix(nextcloudExtension) {
+            account.baseURL = append(fileNamed: nextcloudExtension, to: url)
+        }
     }
     
     //MARK: Networking
